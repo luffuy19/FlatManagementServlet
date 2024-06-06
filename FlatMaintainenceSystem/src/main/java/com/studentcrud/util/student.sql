@@ -26,6 +26,7 @@ CREATE TABLE users (
     email VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL
 );
+alter table users add column role ENUM('admin', 'user') ;
 CREATE TABLE visitor (
     id INT AUTO_INCREMENT PRIMARY KEY,
     visitor_name VARCHAR(255),
@@ -44,4 +45,28 @@ CREATE TABLE complain (
     complain_status ENUM('finished', 'not_finished'),
     user_id INT,
     FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE TABLE Messages (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    message TEXT,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES Users(id)
+);
+
+CREATE TABLE Employee (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    phone_number VARCHAR(15) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    department VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Task (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    description VARCHAR(255) NOT NULL,
+    status VARCHAR(50) NOT NULL,
+    employee_id INT,
+    FOREIGN KEY (employee_id) REFERENCES Employee(id)
 );

@@ -21,23 +21,21 @@ public class LoginServlet extends HttpServlet {
     public LoginServlet() {
         super();
     }
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		User user = new User();
 		user.setEmail(request.getParameter("loginEmail"));
 		user.setPassword(request.getParameter("loginPassword"));
-		String emailPattern = "^[a-zA-Z0-9._%+-]+@inam\\.com$";
 		System.out.println(user.getEmail());
 		FlatMaintainenceDao dao = new FlatMaintainenceDao();
 		try {
-			int loginCheck = dao.loginCheck(user);
-			if(loginCheck==1) {
+			User loginCheck = dao.loginCheck(user);
+			if(loginCheck!=null) {
 				HttpSession session = request.getSession();
-				session.setAttribute("user_id", user.getId());
-				if (Pattern.matches(emailPattern, user.getEmail())) {
-		            System.out.println("send to admin page");
-		        } else {
-		            System.out.println("send to user page");
-		        }
+				session.setAttribute("users", loginCheck);
+				if (loginCheck.getRole().equals("admin")) {
+		            response.sendRedirect("home.jsp?role="+loginCheck.getRole());
+				}    
 			}
 			else {
 				response.sendRedirect("index.jsp?error=1");
