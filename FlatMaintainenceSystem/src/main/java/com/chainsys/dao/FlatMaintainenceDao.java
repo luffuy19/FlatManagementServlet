@@ -3,6 +3,7 @@ package com.chainsys.dao;
 import java.sql.SQLException;
 
 import com.chainsys.dto.TrancistionDto;
+import com.chainsys.model.EBbillResponse;
 import com.chainsys.model.Tenant;
 import com.chainsys.model.User;
 
@@ -24,5 +25,23 @@ public class FlatMaintainenceDao {
 	public int addTenant(Tenant tenant) throws ClassNotFoundException, SQLException {
 		TrancistionDto trancistionDto = new TrancistionDto();
 		return trancistionDto.addTenant(tenant);
+	}
+	public EBbillResponse addEbBill(int id,int unit) throws ClassNotFoundException, Exception {
+		int price ;
+		String status;
+		if(unit>100) {
+			price=unit*40;
+			status="no";
+		}
+		else if(unit>400) {
+			price=unit*50;
+			status="no";
+		}
+		else {
+			price=0;
+			status="yes";
+		}
+		TrancistionDto trancistionDto = new TrancistionDto();
+		return trancistionDto.addEbBill(id, price, status);
 	}
 }

@@ -15,6 +15,7 @@ import javax.servlet.http.Part;
 
 import com.chainsys.dao.FlatMaintainenceDao;
 import com.chainsys.model.Tenant;
+import com.chainsys.model.User;
 
 @WebServlet("/TenantServlet")
 @MultipartConfig

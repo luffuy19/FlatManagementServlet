@@ -2,8 +2,6 @@ package com.chainsys.controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -34,8 +32,11 @@ public class LoginServlet extends HttpServlet {
 				HttpSession session = request.getSession();
 				session.setAttribute("users", loginCheck);
 				if (loginCheck.getRole().equals("admin")) {
-		            response.sendRedirect("home.jsp?role="+loginCheck.getRole());
-				}    
+		            response.sendRedirect("home.jsp");
+				}
+				else {
+					System.out.println("send to user page");
+				}
 			}
 			else {
 				response.sendRedirect("index.jsp?error=1");

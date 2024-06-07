@@ -1,4 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="com.chainsys.model.User"%>
+<%@ page import="javax.servlet.http.HttpSession"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -137,8 +139,9 @@ h2 {
 </head>
 <body>
 	<%
-	String role=request.getParameter("role"); 
-	if(role.equals("admin")) {
+	HttpSession s = request.getSession(false);
+	User users=(User) s.getAttribute("users");
+	if(users.getRole().equals("admin"))
 	%>
     <div class="sidebar">
         <img style="padding-bottom: 30px;" width="230" height="150" src="img/logo.png" alt=""> <br>
@@ -149,11 +152,11 @@ h2 {
             </li>
             <li class="nav-item">
                 <img width="30" height="30" src="img/addicon.png" alt="Add Tenant" />
-                <a class="nav-link" href="addTenant.jsp?role=<%= role %>">Add Tenant</a>
+                <a class="nav-link" href="addTenant.jsp">Add Tenant</a>
             </li>
             <li class="nav-item">
                 <img width="30" height="30" src="img/eb.png" alt="EB Bill" />
-                <a class="nav-link" href="#" data-target="addEBBill">Add EB-Bill</a>
+                <a class="nav-link" href="ebbill.jsp" data-target="addEBBill">Add EB-Bill</a>
             </li>
             <li class="nav-item">
                 <img width="30" height="30" src="img/visitor.png" alt="Visitors" />
@@ -173,11 +176,10 @@ h2 {
             </li>
             <li class="nav-item">
                 <img width="30" height="30" src="img/logout.png" alt="Logout" />
-                <a class="nav-link" href="home.jsp?role=<%= role %>">Log-Out</a>
+                <a class="nav-link" href="home.jsp">Log-Out</a>
             </li>
         </ul>
     </div>
-	<%} %>
     <!-- Bootstrap JS and dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>

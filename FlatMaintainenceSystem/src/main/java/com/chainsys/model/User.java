@@ -1,6 +1,6 @@
 package com.chainsys.model;
 
-public class User {
+public class User  {
 	private int id;
 	private String email;
 	private String password;

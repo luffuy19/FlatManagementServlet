@@ -127,11 +127,11 @@ h2 {
 			src="img/logo.png" alt=""> <br>
 		<ul class="nav flex-column">
 			<li class="nav-item"><img width="30" height="30"
-				src="img/addicon.png" alt="Add Tenant">
-				<a class="nav-link" href="#" data-target="addTenant">Search</a></li>
+				src="img/addicon.png" alt="Add Tenant"> <a class="nav-link"
+				href="#" data-target="addTenant">Search</a></li>
 			<li class="nav-item"><img width="30" height="30"
-				src="img/logout.png" alt="Logout">
-				<a class="nav-link" href="home.jsp" data-target="logout">Back</a></li>
+				src="img/logout.png" alt="Logout"> <a class="nav-link"
+				href="home.jsp" data-target="logout">Back</a></li>
 		</ul>
 	</div>
 
@@ -139,7 +139,7 @@ h2 {
 		<div class="container-fluid">
 			<div class="row mt-3">
 				<div class="col-md-6">
-					<form action="SearchTenantServlet" method="get">
+					<form action="EBbillServlet" method="get">
 						<div class="input-group">
 							<div class="input-group-prepend">
 								<span class="input-group-text" id="search-addon"><i
@@ -147,7 +147,7 @@ h2 {
 							</div>
 							<input type="text" name="query" class="form-control"
 								placeholder="Search" aria-label="Search"
-								aria-describedby="search-addon" >
+								aria-describedby="search-addon">
 						</div>
 				</div>
 				<div class="col-md-3">
@@ -159,7 +159,7 @@ h2 {
 			</div>
 			<div class="container tenant-info">
 				<!-- Form for deleting tenants -->
-				<form action="DeleteServlet" method="post">
+				<form action="EBbillServlet" method="post">
 					<!-- Display search results here -->
 					<%
 					List<Tenant> tenantList = (List<Tenant>) request.getAttribute("tenantList");
@@ -173,7 +173,9 @@ h2 {
 						for (Tenant tenant : tenantList) {
 					%>
 					<div class="tenant-header mb-4">
-						<img src="data:image/jpeg;base64,<%=Base64.getEncoder().encodeToString(tenant.getPhoto())%>" alt="Tenant Photo" class="img-thumbnail" id="tenantPhoto">
+						<img
+							src="data:image/jpeg;base64,<%=Base64.getEncoder().encodeToString(tenant.getPhoto())%>"
+							alt="Tenant Photo" class="img-thumbnail" id="tenantPhoto">
 						<div>
 							<h2><%=tenant.getName()%></h2>
 							<div class="info-item">
@@ -224,11 +226,53 @@ h2 {
 							</div>
 						</div>
 					</div>
-					<!-- Delete Button -->
+					<!-- Add EB Bill Button Trigger -->
 					<div class="mb-4">
-							<input type="hidden" value="<%= tenant.getId() %>" name="deleteId">
-							<button type="submit" name="deleteTenant" class="btn btn-danger">Delete Account</button>
+						<input type="hidden" value="<%=tenant.getId()%>" name="tenantId"
+							id="tenantId<%=tenant.getId()%>">
+						<button type="button" class="btn btn-dark" data-toggle="modal"
+							data-target="#ebBillModal<%=tenant.getId()%>">Add EB
+							Bill</button>
 					</div>
+
+					<!-- EB Bill Modal Form -->
+					<div class="modal fade" id="ebBillModal<%=tenant.getId()%>"
+						tabindex="-1" role="dialog"
+						aria-labelledby="ebBillModalLabel<%=tenant.getId()%>"
+						aria-hidden="true">
+						<div class="modal-dialog modal-dialog-centered" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title"
+										id="ebBillModalLabel<%=tenant.getId()%>">
+										Add EB Bill for
+										<%=tenant.getName()%>
+									</h5>
+									<button type="button" class="close" data-dismiss="modal"
+										aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<form action="EBbillServlet" method="post">
+									<div class="modal-body">
+										<input type="hidden" name="tenantId"
+											value="<%=tenant.getId()%>"> <input type="hidden"
+											name="query" value="<%=query%>">
+										<div class="form-group">
+											<label for="unit">Unit:</label> <input type="number"
+												class="form-control" id="unit" name="unit" required>
+										</div>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary"
+											data-dismiss="modal">Close</button>
+										<button type="submit" class="btn btn-primary">Submit</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+
 					<%
 					}
 					} else {
@@ -286,5 +330,6 @@ h2 {
 		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 	<script
 		src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+		
 </body>
 </html>

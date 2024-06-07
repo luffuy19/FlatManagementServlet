@@ -127,7 +127,7 @@ h2 {
             </li>
 			<li class="nav-item"><img width="30" height="30"
 				src="./img/logout.png" alt="Logout" /> 
-				<a class="nav-link" href="home.jsp?role=<%= role %>" data-target="logout">Back</a>
+				<a class="nav-link" href="home.jsp" data-target="logout">Back</a>
             </li>
 		</ul>
 	</div>

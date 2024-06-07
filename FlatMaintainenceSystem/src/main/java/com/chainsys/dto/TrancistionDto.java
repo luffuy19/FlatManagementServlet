@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.chainsys.model.EBbillResponse;
 import com.chainsys.model.Tenant;
 import com.chainsys.model.User;
 import com.studentcrud.util.Connectionutil;
@@ -129,15 +130,28 @@ public class TrancistionDto {
 		}
 		return count;
 	}
+
 	public void deleteTenant(int tenantId) throws ClassNotFoundException {
-        String sql = "UPDATE users_details SET delete_user = ?  WHERE id = ?";
-        try (Connection connection = Connectionutil.getConnections()){
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1,1);
-            statement.setInt(2, tenantId);
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+		String sql = "UPDATE users_details SET delete_user = ?  WHERE id = ?";
+		try (Connection connection = Connectionutil.getConnections()) {
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setInt(1, 1);
+			statement.setInt(2, tenantId);
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public EBbillResponse addEbBill(int id, int newEbBill, String newEbBillStatus) throws ClassNotFoundException, Exception {
+		String query = "UPDATE users_details SET eb_bill = ?, eb_bill_status = ? WHERE id = ?";
+		try (Connection connection = Connectionutil.getConnections()) {
+			PreparedStatement statement = connection.prepareStatement(query);
+			statement.setInt(1, newEbBill); // Assuming eb_bill is of type DECIMAL
+			statement.setString(2, newEbBillStatus);
+			statement.setInt(3, id); // Assuming id is of type INT
+			int executeUpdate = statement.executeUpdate();
+			return new EBbillResponse(newEbBill, newEbBillStatus);
+		}
+	}
 }
