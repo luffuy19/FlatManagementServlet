@@ -232,7 +232,7 @@ h2 {
 							id="tenantId<%=tenant.getId()%>">
 						<button type="button" class="btn btn-dark" data-toggle="modal"
 							data-target="#ebBillModal<%=tenant.getId()%>">Add EB
-							Bill</button>
+							 Bill</button>
 					</div>
 
 					<!-- EB Bill Modal Form -->
