@@ -18,10 +18,9 @@ import javax.servlet.RequestDispatcher;
 @WebServlet("/EBbillServlet")
 public class EBbillServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-
+    int page = 1;
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String query = request.getParameter("query");
-        int page = 1;
         int limit = 1;
         
         if (request.getParameter("page") != null) {
@@ -49,8 +48,7 @@ public class EBbillServlet extends HttpServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-        response.sendRedirect("ebbill.jsp?query="+request.getParameter("query"));
-        
+        response.sendRedirect("EBbillServlet?query="+request.getParameter("query")+"&page="+page);  
     }
 }
 

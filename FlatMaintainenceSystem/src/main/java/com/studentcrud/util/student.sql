@@ -70,3 +70,13 @@ CREATE TABLE Task (
     employee_id INT,
     FOREIGN KEY (employee_id) REFERENCES Employee(id)
 );
+CREATE TABLE flat_management.visitors (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    visitor_name VARCHAR(255),
+    in_time VARCHAR(25),
+    out_time VARCHAR(25),
+    in_date VARCHAR(25),
+    out_date VARCHAR(25),
+    flat_floor INT,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

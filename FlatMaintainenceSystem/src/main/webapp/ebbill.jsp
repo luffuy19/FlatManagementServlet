@@ -119,6 +119,7 @@ h2 {
 .tenant-header img {
 	margin-right: 20px;
 }
+
 </style>
 </head>
 <body>
@@ -127,10 +128,10 @@ h2 {
 			src="img/logo.png" alt=""> <br>
 		<ul class="nav flex-column">
 			<li class="nav-item"><img width="30" height="30"
-				src="img/addicon.png" alt="Add Tenant"> <a class="nav-link"
-				href="#" data-target="addTenant">Search</a></li>
+				src="img/eb.png" alt="Add Tenant"> <a class="nav-link"
+				href="#" data-target="addTenant">Add EB Bill</a></li>
 			<li class="nav-item"><img width="30" height="30"
-				src="img/logout.png" alt="Logout"> <a class="nav-link"
+				src="img/back.png" alt="Logout"> <a class="nav-link"
 				href="home.jsp" data-target="logout">Back</a></li>
 		</ul>
 	</div>
@@ -192,6 +193,15 @@ h2 {
 										<strong>Aadhaar Number:</strong> <span><%=tenant.getAadhaarNumber()%></span>
 									</div>
 									<div class="info-item">
+										<strong>Email:</strong> <span><%=tenant.getEmail()%></span>
+									</div>
+									<div class="info-item">
+										<strong>Flat Type:</strong> <span><%=tenant.getFlatType()%></span>
+									</div>
+									<div class="info-item">
+										<strong>Flat Floor:</strong> <span><%=tenant.getFlatFloor()%></span>
+									</div>
+									<div class="info-item">
 										<strong>Family Members:</strong> <span><%=tenant.getFamilyNembers()%></span>
 									</div>
 									<div class="info-item">
@@ -232,7 +242,7 @@ h2 {
 							id="tenantId<%=tenant.getId()%>">
 						<button type="button" class="btn btn-dark" data-toggle="modal"
 							data-target="#ebBillModal<%=tenant.getId()%>">Add EB
-							 Bill</button>
+							Bill</button>
 					</div>
 
 					<!-- EB Bill Modal Form -->
@@ -250,7 +260,7 @@ h2 {
 									</h5>
 									<button type="button" class="close" data-dismiss="modal"
 										aria-label="Close">
-										<span aria-hidden="true">&times;</span>
+										<span aria-hidden="true"></span>
 									</button>
 								</div>
 								<form action="EBbillServlet" method="post">
@@ -299,14 +309,14 @@ h2 {
 						%>
 						<li class="page-item <%=(i == currentPage) ? "active" : ""%>">
 							<a class="page-link"
-							href="SearchTenantServlet?query=<%=query%>&page=<%=i%>"><%=i%></a>
+							href="EBbillServlet?query=<%=query%>&page=<%=i%>"><%=i%></a>
 						</li>
 						<%
 						}
 						if (currentPage < totalPages) {
 						%>
 						<li class="page-item"><a class="page-link"
-							href="SearchTenantServlet?query=<%=query%>&page=<%=currentPage + 1%>"
+							href="EBbillServlet?query=<%=query%>&page=<%=currentPage + 1%>"
 							aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 						</a></li>
 						<%
@@ -330,6 +340,6 @@ h2 {
 		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 	<script
 		src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-		
+
 </body>
 </html>

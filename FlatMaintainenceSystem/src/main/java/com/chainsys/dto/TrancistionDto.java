@@ -10,6 +10,7 @@ import java.util.List;
 import com.chainsys.model.EBbillResponse;
 import com.chainsys.model.Tenant;
 import com.chainsys.model.User;
+import com.chainsys.model.Visitor;
 import com.studentcrud.util.Connectionutil;
 
 public class TrancistionDto {
@@ -151,7 +152,65 @@ public class TrancistionDto {
 			statement.setString(2, newEbBillStatus);
 			statement.setInt(3, id); // Assuming id is of type INT
 			int executeUpdate = statement.executeUpdate();
+			System.out.println(executeUpdate);
 			return new EBbillResponse(newEbBill, newEbBillStatus);
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
+		return null;
+	}
+	public void addVisitor(Visitor visitor) throws ClassNotFoundException {
+		String query="INSERT INTO visitors (visitor_name, in_time, in_date,flat_floor) VALUES (?,?,?,?)";
+		try (Connection connection = Connectionutil.getConnections()) {
+			PreparedStatement statement = connection.prepareStatement(query);
+			statement.setString(1,visitor.getVisitorName());
+			statement.setString(2,visitor.getInTime());
+			statement.setString(3,visitor.getInDate());
+			statement.setInt(4,visitor.getFlat_floor());
+			int executeUpdate = statement.executeUpdate();
+			System.out.println(executeUpdate);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	public void outVisitor(Visitor visitor) throws ClassNotFoundException {
+		String query="UPDATE visitors SET out_time = ?, out_date = ? WHERE id = ? ";
+		try (Connection connection = Connectionutil.getConnections()) {
+			PreparedStatement statement = connection.prepareStatement(query);
+			statement.setString(1,visitor.getOutTime());
+			statement.setString(2,visitor.getOutDate());
+			statement.setInt(3,visitor.getId());
+			int executeUpdate = statement.executeUpdate();
+			System.out.println(executeUpdate);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	public List<Visitor> viewVisitor(String days) throws SQLException, ClassNotFoundException {
+		String query = null;
+		if(days!=null) {
+			if(days.equals("30")) {
+				query = "SELECT * FROM visitors WHERE timestamp >= NOW() - INTERVAL 30 DAY";
+			}
+			else if(days.equals("7")) {
+				query = "SELECT * FROM visitors WHERE timestamp >= NOW() - INTERVAL 7 DAY";
+			}
+		}
+		else {
+			query = "SELECT * FROM visitors WHERE timestamp >= NOW() - INTERVAL 1 DAY";
+		}
+		List<Visitor> al = new ArrayList<Visitor>();
+		try (Connection connection = Connectionutil.getConnections()) {
+			PreparedStatement statement = connection.prepareStatement(query);
+			ResultSet resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				Visitor visitor= new Visitor(resultSet.getInt("id"),resultSet.getString("visitor_name"),resultSet.getString("in_time"),resultSet.getString("out_time"),resultSet.getString("in_date"), resultSet.getString("out_date"),resultSet.getInt("flat_floor"),resultSet.getString("timestamp"));
+				al.add(visitor);
+			}
+			return al;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

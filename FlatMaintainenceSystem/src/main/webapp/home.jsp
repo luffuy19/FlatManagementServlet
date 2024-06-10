@@ -148,7 +148,7 @@ h2 {
         <ul class="nav flex-column">
             <li class="nav-item">
                 <img width="30" height="30" src="img/search.png" alt="Profile" />
-                <a class="nav-link active" href="search.jsp" data-target="profile">Search</a>
+                <a class="nav-link active" href="search.jsp" data-target="profile">View Tenant</a>
             </li>
             <li class="nav-item">
                 <img width="30" height="30" src="img/addicon.png" alt="Add Tenant" />
@@ -160,7 +160,7 @@ h2 {
             </li>
             <li class="nav-item">
                 <img width="30" height="30" src="img/visitor.png" alt="Visitors" />
-                <a class="nav-link" href="#" data-target="visitors">Visitors</a>
+                <a class="nav-link" href="Visitor" data-target="visitors">Visitors</a>
             </li>
             <li class="nav-item">
                 <img width="30" height="30" src="img/complain.png" alt="Complains" />
