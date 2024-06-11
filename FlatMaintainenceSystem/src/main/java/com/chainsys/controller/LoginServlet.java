@@ -19,7 +19,7 @@ public class LoginServlet extends HttpServlet {
     public LoginServlet() {
         super();
     }
-	@Override
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		User user = new User();
 		user.setEmail(request.getParameter("loginEmail"));

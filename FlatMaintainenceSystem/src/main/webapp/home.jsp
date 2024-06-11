@@ -164,7 +164,7 @@ h2 {
             </li>
             <li class="nav-item">
                 <img width="30" height="30" src="img/complain.png" alt="Complains" />
-                <a class="nav-link" href="#" data-target="complains">Complains</a>
+                <a class="nav-link" href="complain.jsp" data-target="complains">Complains</a>
             </li>
             <li class="nav-item">
                 <img width="30" height="30" src="img/chat.png" alt="chat" />

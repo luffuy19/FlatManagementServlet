@@ -204,7 +204,6 @@ h2 {
 					List<Visitor> visitors = (List<Visitor>) request.getAttribute("visitor");
 					if (visitors != null && !visitors.isEmpty()) {
 					%>
-					<table class="table table-striped mt-4">
 						<thead class="thead-dark">
 							<tr>
 								<th>ID</th>
@@ -214,6 +213,7 @@ h2 {
 								<th>In Date</th>
 								<th>Out Date</th>
 								<th>Visitor Floor</th>
+								<th>Visitor Door No</th>
 								<th>Action</th>
 							</tr>
 						</thead>
@@ -228,9 +228,11 @@ h2 {
 								<td><%=visitor.getOutTime()%></td>
 								<td><%=visitor.getInDate()%></td>
 								<td><%=visitor.getOutDate()%></td>
-								<td><%=visitor.getFlat_floor()%></td>
-								<td class="outVisitorButton" data-id="<%=visitor.getId()%>"><a href="#"><img width="30" height="30"
-										alt="Out Visitor" src="img/add.png"></a></td>
+								<td><%=visitor.getFlatFloor()%></td>
+								<td><%=visitor.getRoomNo()%></td>
+								<td class="outVisitorButton" data-id="<%=visitor.getId()%>"><a
+									href="#"><img width="30" height="30" alt="Out Visitor"
+										src="img/add.png"></a></td>
 							</tr>
 							<%
 							}
@@ -250,12 +252,13 @@ h2 {
 								<th>In Date</th>
 								<th>Out Date</th>
 								<th>Visitor Floor</th>
+								<th>Visitor RoomNo</th>
 								<th>Action</th>
 							</tr>
 						</thead>
 						<tbody id="visitorTableBody">
 							<tr>
-								<td colspan="8">No Visitors</td>
+								<td colspan="9">No Visitors</td>
 							</tr>
 						</tbody>
 					</table>
@@ -263,69 +266,74 @@ h2 {
 					}
 					%>
 					<button id="addVisitorButton" class="add-button">+</button>
-			</div>
-			<div id="inVisitorFormContainer" class="form-container hidden">
-				<form id="visitorForm" class="needs-validation" action="Visitor"
-					method="post" novalidate>
-					<h2 class="text-center">Add New Visitor</h2>
-					<div class="form-group">
-						<label for="visitorName">Visitor Name:</label> <input type="text"
-							class="form-control" id="visitorName" name="visitorName" required>
-						<div class="invalid-feedback">Please enter the visitor's
-							name.</div>
 					</div>
-					<div class="form-group">
-						<label for="inTime">In Time:</label> <input type="time"
-							class="form-control" id="inTime" name="inTime" required>
-						<div class="invalid-feedback">Please enter the in time.</div>
+					<div id="inVisitorFormContainer" class="form-container hidden">
+						<form id="visitorForm" class="needs-validation" action="Visitor" method="post" novalidate>
+							<h2 class="text-center">Add New Visitor</h2>
+							<div class="form-group">
+								<label for="visitorName">Visitor Name:</label> 
+								<input type="text" class="form-control" id="visitorName" name="visitorName" required>
+								<div class="invalid-feedback">Please enter the visitor's name.</div>
+							</div>
+							<div class="form-group">
+								<label for="inTime">In Time:</label> 
+								<input type="time" class="form-control" id="inTime" name="inTime" required>
+								<div class="invalid-feedback">Please enter the in time.</div>
+							</div>
+							<div class="form-group">
+								<label for="inDate">In Date:</label> <input type="date"
+									class="form-control" id="inDate" name="inDate" required>
+								<div class="invalid-feedback">Please enter the in date.</div>
+							</div>
+							<div class="form-group">
+								<label for="visitorFloor">Visitor Floor:</label> <input type="number" class="form-control" id="visitorFloor" name="visitorFloor" required>
+								<div class="invalid-feedback">Please enter the visitor's floor.</div>
+							</div>
+							<div class="form-group">
+								<label for="visitorRoomNo">Visitor Room No:</label> <select
+									class="form-control" id="visitorRoomNo" name="visitorRoomNo"
+									required>
+									<option value="" disabled selected>Select a room</option>
+									<option value="A">A</option>
+									<option value="B">B</option>
+									<option value="C">C</option>
+								</select>
+								<div class="invalid-feedback">Please select the visitor's room.</div>
+							</div>
+							<input type="hidden" name="checkIn" value="A">
+							<button type="submit" class="btn btn-success btn-block">Add Visitor</button>
+						</form>
 					</div>
-					<div class="form-group">
-						<label for="inDate">In Date:</label> <input type="date"
-							class="form-control" id="inDate" name="inDate" required>
-						<div class="invalid-feedback">Please enter the in date.</div>
+					<div id="outVisitorFormContainer" class="form-container hidden">
+						<form id="outVisitorForm" class="needs-validation"
+							action="Visitor" method="post">
+							<input type="hidden" id="visitorId" name="visitorId">
+							<div class="form-group">
+								<label for="outDate">Out Date:</label> <input type="date"
+									class="form-control" id="outDate" name="outDate">
+							</div>
+							<div class="form-group">
+								<label for="outTime">Out Time:</label> <input type="time"
+									class="form-control" id="outTime" name="outTime">
+							</div>
+							<input type="hidden" name="checkIn" value="B">
+							<button type="submit" class="btn btn-success btn-block">Submit</button>
+						</form>
 					</div>
-					<div class="form-group">
-						<label for="visitorFloor">Visitor Floor:</label> <input
-							type="number" class="form-control" id="visitorFloor"
-							name="visitorFloor" required>
-						<div class="invalid-feedback">Please enter the visitor's
-							floor.</div>
 					</div>
-					<input type="hidden" name="checkIn" value="A">
-					<button type="submit" class="btn btn-success btn-block">Add
-						Visitor</button>
-				</form>
-			</div>
-			<div id="outVisitorFormContainer" class="form-container hidden">
-				<form id="outVisitorForm" class="needs-validation" action="Visitor"
-					method="post">
-					<input type="hidden" id="visitorId" name="visitorId">
-					<div class="form-group">
-						<label for="outDate">Out Date:</label> <input type="date"
-							class="form-control" id="outDate" name="outDate">
 					</div>
-					<div class="form-group">
-						<label for="outTime">Out Time:</label> <input type="time"
-							class="form-control" id="outTime" name="outTime">
-					</div>
-					<input type="hidden" name="checkIn" value="B">
-					<button type="submit" class="btn btn-success btn-block">Submit</button>
-				</form>
-			</div>
-		</div>
-	</div>
-	<!-- Bootstrap JS and dependencies -->
-	<script
-		src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
-	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-	<script
-		src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-	<script>
+					<!-- Bootstrap JS and dependencies -->
+					<script
+						src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+					<script
+						src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
+					<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+					<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+					<script
+						src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+					<script
+						src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+					<script>
         document.addEventListener('DOMContentLoaded', () => {
             const addVisitorButton = document.getElementById('addVisitorButton');
             const outVisitorButtons = document.querySelectorAll('.outVisitorButton');
@@ -359,26 +367,11 @@ h2 {
                 formData.forEach((value, key) => {
                     visitorData[key] = value;
                 });
-                addVisitorToTable(visitorData);
                 visitorForm.reset();
                 visitorForm.classList.remove('was-validated');
                 inVisitorFormContainer.classList.add('hidden');
             });
 
-            function addVisitorToTable(visitorData) {
-                const newRow = document.createElement('tr');
-                newRow.innerHTML = `
-                    <td>${visitorData.id}</td>
-                    <td>${visitorData.visitorName}</td>
-                    <td>${visitorData.inTime}</td>
-                    <td>${visitorData.outTime || ''}</td>
-                    <td>${visitorData.inDate}</td>
-                    <td>${visitorData.outDate || ''}</td>
-                    <td>${visitorData.visitorFloor}</td>
-                    <td class="outVisitorButton" data-id="${visitorData.id}"><a href="#"><img width="30" height="30" alt="Out Visitor" src="img/add.png"></a></td>
-                `;
-                document.getElementById('visitorTableBody').appendChild(newRow);
-            }
         });
        
     </script>

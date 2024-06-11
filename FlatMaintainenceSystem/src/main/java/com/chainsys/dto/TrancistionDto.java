@@ -50,7 +50,7 @@ public class TrancistionDto {
 
 	public int addTenant(Tenant tenant) throws ClassNotFoundException, SQLException {
 		Connection con = Connectionutil.getConnections();
-		String query = "INSERT INTO users_details (name, phone_no,email,aadhaar_number, photo,family_members,flat_type,flat_floor,advance_amount, advance_status, rent_amount, date_of_joining, users_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		String query = "INSERT INTO users_details (name, phone_no,email,aadhaar_number, photo,family_members,flat_type,flat_floor,room_no,advance_amount, advance_status, rent_amount, date_of_joining, users_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		PreparedStatement statement = con.prepareStatement(query);
 		System.out.println(tenant.getEmail());
 		int userId = findUserId(tenant.getEmail());
@@ -63,11 +63,12 @@ public class TrancistionDto {
 			statement.setInt(6, tenant.getFamilyNembers());
 			statement.setString(7, tenant.getFlatType());
 			statement.setString(8, tenant.getFlatFloor());
-			statement.setDouble(9, tenant.getAdvanceAmount());
-			statement.setString(10, tenant.getAdvanceStatus());
-			statement.setDouble(11, tenant.getRentAmount());
-			statement.setString(12, tenant.getDateOfJoining());// Assuming getDateOfJoining returns a LocalDate
-			statement.setInt(13, userId);
+			statement.setString(9, tenant.getFlatFloor());
+			statement.setDouble(10, tenant.getAdvanceAmount());
+			statement.setString(11, tenant.getAdvanceStatus());
+			statement.setDouble(12, tenant.getRentAmount());
+			statement.setString(13, tenant.getDateOfJoining());// Assuming getDateOfJoining returns a LocalDate
+			statement.setInt(14, userId);
 			return statement.executeUpdate();
 		} else {
 			return 0;
@@ -101,7 +102,7 @@ public class TrancistionDto {
 			while (rs.next()) {
 				Tenant tenant = new Tenant(rs.getInt("id"), rs.getString("name"), rs.getString("phone_no"),
 						rs.getString("email"), rs.getString("aadhaar_number"), rs.getBytes("photo"),
-						rs.getInt("family_members"), rs.getString("flat_type"), rs.getString("flat_floor"),
+						rs.getInt("family_members"), rs.getString("flat_type"), rs.getString("flat_floor"),rs.getString("room_no"),
 						rs.getInt("advance_amount"), rs.getString("advance_status"), rs.getInt("rent_amount"),
 						rs.getString("rent_amount_status"), rs.getInt("eb_bill"), rs.getString("eb_bill_status"),
 						rs.getString("date_of_joining"), rs.getString("date_of_ending"), rs.getString("delete_user"),
@@ -160,13 +161,14 @@ public class TrancistionDto {
 		return null;
 	}
 	public void addVisitor(Visitor visitor) throws ClassNotFoundException {
-		String query="INSERT INTO visitors (visitor_name, in_time, in_date,flat_floor) VALUES (?,?,?,?)";
+		String query="INSERT INTO visitors (visitor_name, in_time, in_date,flat_floor,room_no) VALUES (?,?,?,?,?)";
 		try (Connection connection = Connectionutil.getConnections()) {
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setString(1,visitor.getVisitorName());
 			statement.setString(2,visitor.getInTime());
 			statement.setString(3,visitor.getInDate());
-			statement.setInt(4,visitor.getFlat_floor());
+			statement.setInt(4,visitor.getFlatFloor());
+			statement.setString(5,visitor.getRoomNo());
 			int executeUpdate = statement.executeUpdate();
 			System.out.println(executeUpdate);
 		} catch (SQLException e) {
@@ -199,18 +201,18 @@ public class TrancistionDto {
 		else {
 			query = "SELECT * FROM visitors WHERE timestamp >= NOW() - INTERVAL 1 DAY";
 		}
-		List<Visitor> al = new ArrayList<Visitor>();
+		List<Visitor> al = new ArrayList<>();
 		try (Connection connection = Connectionutil.getConnections()) {
 			PreparedStatement statement = connection.prepareStatement(query);
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				Visitor visitor= new Visitor(resultSet.getInt("id"),resultSet.getString("visitor_name"),resultSet.getString("in_time"),resultSet.getString("out_time"),resultSet.getString("in_date"), resultSet.getString("out_date"),resultSet.getInt("flat_floor"),resultSet.getString("timestamp"));
+				Visitor visitor= new Visitor(resultSet.getInt("id"),resultSet.getString("visitor_name"),resultSet.getString("in_time"),resultSet.getString("out_time"),resultSet.getString("in_date"), resultSet.getString("out_date"),resultSet.getInt("flat_floor"),resultSet.getString("room_no"),resultSet.getString("timestamp"));
 				al.add(visitor);
 			}
 			return al;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return al;
 	}
 }

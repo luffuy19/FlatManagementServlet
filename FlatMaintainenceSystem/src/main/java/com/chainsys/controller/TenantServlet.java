@@ -14,8 +14,8 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 import com.chainsys.dao.FlatMaintainenceDao;
+import com.chainsys.dto.TrancistionDto;
 import com.chainsys.model.Tenant;
-import com.chainsys.model.User;
 
 @WebServlet("/TenantServlet")
 @MultipartConfig
@@ -25,12 +25,16 @@ public class TenantServlet extends HttpServlet {
     public TenantServlet() {
         super();
     }
-    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String name = request.getParameter("userName");
         String phoneNo = request.getParameter("phoneNo");
         String email = request.getParameter("email");
-        System.out.println(email);
+        int userId=0;
+        try {
+			 userId = TrancistionDto.findUserId(email);
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		}
         Part filePart = request.getPart("photo");
         byte[] imageBytes = null;
 
@@ -43,7 +47,6 @@ public class TenantServlet extends HttpServlet {
                 return;
             }
         }
-        String role=request.getParameter("role");
         int familyMember = Integer.parseInt(request.getParameter("familyMembers"));
         String aadhaarNumber = request.getParameter("aadhaarNumber");
         int advanceAmount = Integer.parseInt(request.getParameter("advanceAmount"));
@@ -51,20 +54,21 @@ public class TenantServlet extends HttpServlet {
         int rentAmount = Integer.parseInt(request.getParameter("rentAmount"));
         String flatType = request.getParameter("flatType");
         String flatFloor = request.getParameter("floorNumber");
+        String roomNO = request.getParameter("roomNo");
         String dateOfJoining = request.getParameter("dateOfJoining");
 
         HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("user_id") == null) {
+        if (session == null) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "User is not logged in");
             return;
         }
-        Tenant tenant = new Tenant(0, name, phoneNo, email, aadhaarNumber, imageBytes, familyMember, flatType, flatFloor, advanceAmount, advancePaid, rentAmount, null, 0, null, dateOfJoining, null, null, 0);
+        Tenant tenant = new Tenant(0, name, phoneNo, email, aadhaarNumber, imageBytes, familyMember, flatType, flatFloor,roomNO,advanceAmount, advancePaid, rentAmount, null, 0, null, dateOfJoining, null, null,userId);
 
         FlatMaintainenceDao flatMaintainenceDao = new FlatMaintainenceDao();
         try {
             int row = flatMaintainenceDao.addTenant(tenant);
             if(row>0) {
-            	response.sendRedirect("addTenant?role="+role);
+            	response.sendRedirect("addTenant.jsp");
             }
             else {
             	response.sendRedirect("index.jsp");

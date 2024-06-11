@@ -11,10 +11,11 @@ public class Visitor implements Serializable {
     String outTime;
     String inDate;
     String outDate;
-    int flatFloor;    
+    int flatFloor;
+    String roomNo;
     String timestamp ;
 	public Visitor(int id, String visitorName, String inTime, String outTime, String inDate, String outDate,
-			int flat_floor, String timestamp) {
+			int flatFloor, String room_no, String timestamp) {
 		super();
 		this.id = id;
 		this.visitorName = visitorName;
@@ -22,7 +23,8 @@ public class Visitor implements Serializable {
 		this.outTime = outTime;
 		this.inDate = inDate;
 		this.outDate = outDate;
-		this.flatFloor = flat_floor;
+		this.flatFloor = flatFloor;
+		this.roomNo = room_no;
 		this.timestamp = timestamp;
 	}
 	public static long getSerialversionuid() {
@@ -46,19 +48,21 @@ public class Visitor implements Serializable {
 	public String getOutDate() {
 		return outDate;
 	}
-	public int getFlat_floor() {
+	public int getFlatFloor() {
 		return flatFloor;
+	}
+	public String getRoomNo() {
+		return roomNo;
 	}
 	public String getTimestamp() {
 		return timestamp;
 	}
-	@Override
+	
 	public String toString() {
 		return "Visitor [id=" + id + ", visitorName=" + visitorName + ", inTime=" + inTime + ", outTime=" + outTime
-				+ ", inDate=" + inDate + ", outDate=" + outDate + ", flat_floor=" + flatFloor + ", timestamp="
-				+ timestamp + "]";
+				+ ", inDate=" + inDate + ", outDate=" + outDate + ", flatFloor=" + flatFloor + ", room_no=" + roomNo
+				+ ", timestamp=" + timestamp + "]";
 	}
     
-	
     
-}
+}	

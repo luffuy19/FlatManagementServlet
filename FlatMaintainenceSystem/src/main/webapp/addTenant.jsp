@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="com.chainsys.model.User"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -113,9 +114,10 @@ h2 {
 </style>
 </head>
 <body>
-	<% 
-		String role=request.getParameter("role"); 
-		System.out.print(role);
+	<%
+	HttpSession s = request.getSession(false);
+	User users=(User) s.getAttribute("users");
+	if(users.getRole().equals("admin")) {
 	%>
 	<div class="sidebar">
 		<img style="padding-bottom: 30px;" width="230" height="150"
@@ -126,7 +128,7 @@ h2 {
 				href="#" data-target="addTenant">Add Tenant</a>
             </li>
 			<li class="nav-item"><img width="30" height="30"
-				src="./img/logout.png" alt="Logout" /> 
+				src="./img/back.png" alt="Logout" /> 
 				<a class="nav-link" href="home.jsp" data-target="logout">Back</a>
             </li>
 		</ul>
@@ -136,7 +138,7 @@ h2 {
 		<div class="container-fluid">
 			<div class="container mt-5" id="addTenant" style="display: block;">
 				<h2>Tenant Information Form</h2>
-				<form class="needs-validation"  action="TenantServlet?role=<%= role %>" method="post" >
+				<form class="needs-validation"  action="TenantServlet" method="post" enctype="multipart/form-data" >
 					<div class="mb-3">
 						<label for="name" class="form-label">Name</label> 
 						<input type="text" class="form-control" id="name" name="userName" required>
@@ -210,7 +212,16 @@ h2 {
 						<input type="number" class="form-control" id="floorNumber" name="floorNumber" required>
 						<div class="invalid-feedback">Please enter the floor number.</div>
 					</div>
-
+					<div class="mb-3">
+						<label for="roomNo" class="form-label">Room Type</label> 
+						<select class="form-select" id="roomNo" name="roomNo" required>
+							<option value="">Choose...</option>
+							<option value="A">A</option>
+							<option value="B">B</option>
+							<option value="C">C</option>
+						</select>
+						<div class="invalid-feedback">Please select the Room No.</div>
+					</div>
 					<div class="mb-3">
 						<label for="dateOfJoining" class="form-label">Date of Joining</label> 
 						<input type="date" class="form-control" id="dateOfJoining" name="dateOfJoining" required>
@@ -221,7 +232,7 @@ h2 {
 			</div>
 		</div>
 	</div>
-
+	<%} %>
 	<!-- Bootstrap JS and dependencies -->
 	<script
 		src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>

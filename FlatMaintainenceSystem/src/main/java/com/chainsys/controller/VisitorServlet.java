@@ -13,9 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.chainsys.dto.TrancistionDto;
 import com.chainsys.model.Visitor;
 
-/**
- * Servlet implementation class Visitor
- */
 @WebServlet("/Visitor")
 public class VisitorServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -23,10 +20,9 @@ public class VisitorServlet extends HttpServlet {
     public VisitorServlet() {
         super();
     }
-	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("get");
 		TrancistionDto dto = new TrancistionDto();
-		System.out.println("visiotor");
 		String day = request.getParameter("options");
 		try {
 			List<Visitor> viewVisitor = dto.viewVisitor(day);
@@ -37,7 +33,7 @@ public class VisitorServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 	}
-	@Override
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("post");
 		String choice = request.getParameter("checkIn");
@@ -47,7 +43,8 @@ public class VisitorServlet extends HttpServlet {
 	        String inTime = request.getParameter("inTime");
 	        String inDate = request.getParameter("inDate");
 	        int visitorFloor = Integer.parseInt(request.getParameter("visitorFloor"));
-	        Visitor visitor = new Visitor(0, visitorName, inTime,null,inDate,null,visitorFloor,null);
+	        String visitorRoomNo = request.getParameter("visitorRoomNo");
+	        Visitor visitor = new Visitor(0, visitorName, inTime,null,inDate,null,visitorFloor,visitorRoomNo,null);
 	        TrancistionDto dto = new TrancistionDto();
 	        try {
 				dto.addVisitor(visitor);
@@ -60,7 +57,7 @@ public class VisitorServlet extends HttpServlet {
 			int id =Integer.parseInt(request.getParameter("visitorId"));
 			String outTime = request.getParameter("outTime");
 			String outDate = request.getParameter("outDate");
-			Visitor visitor = new Visitor(id, null, null,outTime,null,outDate,0,null);
+			Visitor visitor = new Visitor(id, null, null,outTime,null,outDate,0,null, null);
 			TrancistionDto dto = new TrancistionDto();
 	        try {
 				dto.outVisitor(visitor);
