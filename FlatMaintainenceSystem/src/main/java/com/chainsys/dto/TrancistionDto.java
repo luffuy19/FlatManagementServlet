@@ -7,7 +7,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.chainsys.model.Complain;
 import com.chainsys.model.EBbillResponse;
+import com.chainsys.model.Employee;
+import com.chainsys.model.Task;
 import com.chainsys.model.Tenant;
 import com.chainsys.model.User;
 import com.chainsys.model.Visitor;
@@ -161,7 +164,7 @@ public class TrancistionDto {
 		return null;
 	}
 	public void addVisitor(Visitor visitor) throws ClassNotFoundException {
-		String query="INSERT INTO visitors (visitor_name, in_time, in_date,flat_floor,room_no) VALUES (?,?,?,?,?)";
+		String query="INSERT INTO visitors (visitor_name, in_time, in_date,flat_floor,door_no) VALUES (?,?,?,?,?)";
 		try (Connection connection = Connectionutil.getConnections()) {
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setString(1,visitor.getVisitorName());
@@ -206,7 +209,7 @@ public class TrancistionDto {
 			PreparedStatement statement = connection.prepareStatement(query);
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				Visitor visitor= new Visitor(resultSet.getInt("id"),resultSet.getString("visitor_name"),resultSet.getString("in_time"),resultSet.getString("out_time"),resultSet.getString("in_date"), resultSet.getString("out_date"),resultSet.getInt("flat_floor"),resultSet.getString("room_no"),resultSet.getString("timestamp"));
+				Visitor visitor= new Visitor(resultSet.getInt("id"),resultSet.getString("visitor_name"),resultSet.getString("in_time"),resultSet.getString("out_time"),resultSet.getString("in_date"), resultSet.getString("out_date"),resultSet.getInt("flat_floor"),resultSet.getString("door_no"),resultSet.getString("timestamp"));
 				al.add(visitor);
 			}
 			return al;
@@ -215,4 +218,123 @@ public class TrancistionDto {
 		}
 		return al;
 	}
+	public List<Employee> getAllEmployees() throws SQLException, ClassNotFoundException {
+        List<Employee> employees = new ArrayList<>();
+        String query = "SELECT * FROM employee";
+        Connection connection = Connectionutil.getConnections();
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Employee employee = new Employee(resultSet.getInt("id"), resultSet.getString("name"), resultSet.getString("phone_number"), resultSet.getString("department"));
+                employees.add(employee);
+            }
+        }
+        return employees;
+    }
+	public int AddEmployee(Employee emp) throws SQLException, ClassNotFoundException {
+
+        // Database query to insert a new employee
+        String query = "INSERT INTO employee (name, phone_number,department) VALUES (?, ?, ?)";
+        // Use try-with-resources to ensure the connection and statement are closed properly
+        try (Connection connection = Connectionutil.getConnections();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            // Set the parameters for the query
+            statement.setString(1, emp.getName());
+            statement.setString(2, emp.getPhoneNumber());
+            statement.setString(3, emp.getDepartment());
+
+            // Execute the query
+            return statement.executeUpdate();
+        }
+	}
+	public boolean deleteEmployee(int employeeId) throws SQLException, ClassNotFoundException {
+        String sql = "DELETE FROM employee WHERE id = ?";
+        try (Connection conn = Connectionutil.getConnections();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, employeeId);
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        }
+    }
+	public List<Complain> getAllComplaints() throws SQLException, ClassNotFoundException {
+	    List<Complain> complaints = new ArrayList<>();
+	    String query = "SELECT c.id, c.complain_type, c.comments, c.complain_date, c.complain_status, c.user_id, u.room_no, u.flat_floor " +
+	                   "FROM complain c " +
+	                   "JOIN users_details u ON c.user_id = u.id";
+	    Connection connection = Connectionutil.getConnections();
+	    try (PreparedStatement statement = connection.prepareStatement(query)) {
+	        ResultSet resultSet = statement.executeQuery();
+	        while (resultSet.next()) {
+	            Complain complain = new Complain(
+	                resultSet.getInt("id"),
+	                resultSet.getString("complain_type"),
+	                resultSet.getString("comments"),
+	                resultSet.getString("complain_date"),
+	                resultSet.getString("complain_status"),
+	                resultSet.getInt("user_id"),
+	                resultSet.getString("room_no"),
+	                resultSet.getString("flat_floor")
+	            );
+	            complaints.add(complain);
+	        }
+	    }
+	    return complaints;
+	}
+	public void addComplaint(Complain complaint) throws SQLException, ClassNotFoundException {
+        String query = "INSERT INTO complaints (complain_type, comments, complain_date, complain_status, user_id) VALUES (?, ?, ?, ?, ?)";
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = Connectionutil.getConnections();
+            statement = connection.prepareStatement(query);
+            statement.setString(1, complaint.getComplainType());
+            statement.setString(2, complaint.getComments());
+            statement.setString(3, complaint.getComplainDate());
+            statement.setString(4, complaint.getComplainStatus());
+            statement.setInt(5, complaint.getUserId());
+            statement.executeUpdate();
+        } finally {
+            if (statement != null) {
+                statement.close();
+            }
+            if (connection != null) {
+                connection.close();
+            }
+        }
+    }
+
+    public void deleteComplaint(int complaintId) throws SQLException, ClassNotFoundException {
+        String query = "DELETE FROM complaints WHERE id = ?";
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = Connectionutil.getConnections();
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, complaintId);
+            statement.executeUpdate();
+        } finally {
+            if (statement != null) {
+                statement.close();
+            }
+            if (connection != null) {
+                connection.close();
+            }
+        }
+    }
+    public List<Task> getAllTasks() throws Exception {
+        List<Task> tasks = new ArrayList<>();
+        String sql = "SELECT id, description, status, employee_id FROM task";
+        
+        try (Connection conn = Connectionutil.getConnections();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Task task = new Task(rs.getInt("id"),rs.getString("description"),rs.getString("status"),rs.getInt("employee_id"));
+                tasks.add(task);
+            }
+        }
+        return tasks;
+    }
+    // Other methods like addComplaint, updateComplaint, deleteComplaint, etc.
 }
+

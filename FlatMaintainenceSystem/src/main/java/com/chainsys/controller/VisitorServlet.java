@@ -13,13 +13,19 @@ import javax.servlet.http.HttpServletResponse;
 import com.chainsys.dto.TrancistionDto;
 import com.chainsys.model.Visitor;
 
-@WebServlet("/Visitor")
+/**
+ * Servlet implementation class VisitorServlet
+ */
+@WebServlet("/VisitorServlet")
 public class VisitorServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
     public VisitorServlet() {
         super();
     }
+
+
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("get");
 		TrancistionDto dto = new TrancistionDto();
@@ -33,7 +39,9 @@ public class VisitorServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 	}
-	
+
+
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("post");
 		String choice = request.getParameter("checkIn");

@@ -18,6 +18,7 @@ public class Registeration extends HttpServlet {
     public Registeration() {
         super();
     }
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		User user = new User();
 		user.setEmail(request.getParameter("registerEmail"));
