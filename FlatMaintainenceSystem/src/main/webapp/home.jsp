@@ -6,7 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Home</title>
+<title>InamManagement</title>
 <!-- Bootstrap CSS -->
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 <style>
@@ -140,15 +140,21 @@ h2 {
 <body>
 	<%
 	HttpSession s = request.getSession(false);
+	if (session == null || s.getAttribute("users")==null) {
+		response.sendRedirect("index.jsp");
+	}
+	response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+	response.setHeader("Pragma", "no-cache"); // HTTP 1.0
+	response.setHeader("Expires", "0"); // Proxies
 	User users=(User) s.getAttribute("users");
-	if(users.getRole().equals("admin"))
+	if (users.getRole().equals("admin")) {
 	%>
     <div class="sidebar">
         <img style="padding-bottom: 30px;" width="230" height="150" src="img/logo.png" alt=""> <br>
         <ul class="nav flex-column">
             <li class="nav-item">
                 <img width="30" height="30" src="img/search.png" alt="Profile" />
-                <a class="nav-link active" href="search.jsp" data-target="profile">View Tenant</a>
+                <a class="nav-link active" href="SearchTenantServlet" data-target="profile">View Tenant</a>
             </li>
             <li class="nav-item">
                 <img width="30" height="30" src="img/addicon.png" alt="Add Tenant" />
@@ -156,7 +162,7 @@ h2 {
             </li>
             <li class="nav-item">
                 <img width="30" height="30" src="img/eb.png" alt="EB Bill" />
-                <a class="nav-link" href="ebbill.jsp" data-target="addEBBill">Add EB-Bill</a>
+                <a class="nav-link" href="EBbillServlet" data-target="addEBBill">Add EB-Bill</a>
             </li>
             <li class="nav-item">
                 <img width="30" height="30" src="img/visitor.png" alt="Visitors" />
@@ -168,18 +174,50 @@ h2 {
             </li>
             <li class="nav-item">
                 <img width="30" height="30" src="img/chat.png" alt="chat" />
-                <a class="nav-link" href="#" data-target="chat">chat</a>
+                <a class="nav-link" href="chat.jsp" data-target="chat">chat</a>
             </li>
             <li class="nav-item">
                 <img width="30" height="30" src="img/event.png" alt="Events" />
-                <a class="nav-link" href="#" data-target="addEvents">Add Events</a>
+                <a class="nav-link" href="event.jsp" data-target="addEvents">Add Events</a>
             </li>
             <li class="nav-item">
                 <img width="30" height="30" src="img/logout.png" alt="Logout" />
-                <a class="nav-link" href="home.jsp">Log-Out</a>
+                <a class="nav-link" href="LogoutServlet">Log-Out</a>
             </li>
         </ul>
     </div>
+    <% }
+    else { %>
+    	<div class="sidebar">
+        <img style="padding-bottom: 30px;" width="230" height="150" src="img/logo.png" alt=""> <br>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <img width="30" height="30" src="img/search.png" alt="Profile" />
+                <a class="nav-link active" href="SearchTenantServlet" data-target="profile">Search</a>
+            </li>
+            <li class="nav-item">
+                <img width="30" height="30" src="img/eb.png" alt="EB Bill" />
+                <a class="nav-link" href="checkPayment" data-target="addEBBill">payment</a>
+            </li>
+            <li class="nav-item">
+                <img width="30" height="30" src="img/complain.png" alt="Complains" />
+                <a class="nav-link" href="complain.jsp" data-target="complains">Complains</a>
+            </li>
+            <li class="nav-item">
+                <img width="30" height="30" src="img/chat.png" alt="chat" />
+                <a class="nav-link" href="chat.jsp" data-target="chat">chat</a>
+            </li>
+            <li class="nav-item">
+                <img width="30" height="30" src="img/event.png" alt="Events" />
+                <a class="nav-link" href="event.jsp" data-target="addEvents">Events</a>
+            </li>
+            <li class="nav-item">
+                <img width="30" height="30" src="img/logout.png" alt="Logout" />
+                <a class="nav-link" href="LogoutServlet">Log-Out</a>
+            </li>
+        </ul>
+    </div>
+    <%}  %>
     <!-- Bootstrap JS and dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>

@@ -80,3 +80,30 @@ CREATE TABLE flat_management.visitors (
     flat_floor INT,
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE user_payments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    payment_date DATE NOT NULL,
+    FOREIGN KEY (id) REFERENCES flat_management.users(id) ON DELETE CASCADE
+);
+DELIMITER //
+
+CREATE PROCEDURE user_payments (IN p_user_id INT, OUT p_has_paid BOOLEAN)
+DELIMITER //
+
+CREATE PROCEDURE user_payments (IN p_user_id INT, OUT p_has_paid BOOLEAN)
+BEGIN
+    SET @start_date = DATE_FORMAT(NOW(), '%Y-%m-01');
+    SET @end_date = LAST_DAY(NOW());
+    
+    SELECT COUNT(*) > 0 INTO p_has_paid
+    FROM user_payments
+    WHERE user_id = p_user_id AND payment_date BETWEEN @start_date AND @end_date;
+END //
+
+DELIMITER ;
+
+SET @p_user_id = 1;  -- Replace with an actual user ID
+SET @p_has_paid = FALSE;
+CALL user_payments(@p_user_id, @p_has_paid);

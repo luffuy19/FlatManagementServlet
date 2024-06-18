@@ -8,9 +8,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.chainsys.dto.TrancistionDto;
+import com.chainsys.model.Complain;
 import com.chainsys.model.Employee;
+import com.chainsys.model.User;
 
 // Replace this with your actual database connection utility class
 
@@ -41,7 +44,7 @@ public class EmployeeServlet extends HttpServlet {
 				response.sendRedirect("error.jsp");
 			}
 			break;
-		case "deleteEmployee" : 
+		case "deleteEmployee":
 			int taskId = Integer.parseInt(request.getParameter("employeeId"));
 			try {
 				dto.deleteEmployee(taskId);
@@ -50,7 +53,45 @@ public class EmployeeServlet extends HttpServlet {
 				e.printStackTrace();
 			} catch (SQLException e) {
 				e.printStackTrace();
-			}	
+			}
+		case "assignWork":
+			int workerId = Integer.parseInt(request.getParameter("workerId"));
+			int complaintId = Integer.parseInt(request.getParameter("complaintId"));
+
+			try {
+				dto.addTask(workerId, complaintId);
+				response.sendRedirect("complain.jsp?success=true");
+			} catch (Exception e) {
+				e.printStackTrace();
+				response.sendRedirect("complain.jsp?success=false");
+			}
+			break;
+		case "deleteTask":
+			int complainId = Integer.parseInt(request.getParameter("complaintId"));
+			try {
+				dto.deleteTasksByComplainId(complainId);
+				dto.deleteComplaint(complainId);
+			} catch (ClassNotFoundException | SQLException e) {
+				e.printStackTrace();
+			}
+			response.sendRedirect("complain.jsp");
+			break;
+		case "addTask":
+			String complainType = request.getParameter("complain_type");
+			String comments = request.getParameter("comments");
+			String complainDate = request.getParameter("complain_date");
+			String floorNo = request.getParameter("floor_no");
+			String roomNo = request.getParameter("room_no");
+			HttpSession s = request.getSession(false);
+			User users = (User) s.getAttribute("users");
+			Complain complain = new Complain(0, complainType, comments, complainDate, complainType, users.getId(), floorNo, roomNo);
+			try {
+				dto.addComplaint(complain);
+				response.sendRedirect("complain.jsp");
+			} catch (ClassNotFoundException | SQLException e) {
+				e.printStackTrace();
+			}
 		}
+
 	}
 }

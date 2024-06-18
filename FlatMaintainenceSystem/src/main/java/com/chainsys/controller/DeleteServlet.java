@@ -29,7 +29,7 @@ public class DeleteServlet extends HttpServlet {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		response.sendRedirect("search.jsp");
+		response.sendRedirect("SearchTenantServlet");
 	}
 
 }

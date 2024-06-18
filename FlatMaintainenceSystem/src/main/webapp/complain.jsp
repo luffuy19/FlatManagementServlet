@@ -4,6 +4,7 @@
 <%@ page import="com.chainsys.model.Complain"%>
 <%@ page import="com.chainsys.model.Employee"%>
 <%@ page import="com.chainsys.model.Task"%>
+<%@ page import="com.chainsys.model.User"%>
 <%@ page import="com.chainsys.dto.*"%>
 <%
 TrancistionDto dto = new TrancistionDto();
@@ -15,7 +16,7 @@ List<Task> tasks = (List<Task>) dto.getAllTasks();
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Complaint Management</title>
+<title>InamManagement</title>
 <link
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
 	rel="stylesheet">
@@ -75,21 +76,59 @@ h2 {
 </style>
 </head>
 <body>
+	<%
+	HttpSession s = request.getSession(false);
+	if (session == null) {
+		response.sendRedirect("index.jsp");
+		return;
+	}
+	response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+	response.setHeader("Pragma", "no-cache"); // HTTP 1.0
+	response.setHeader("Expires", "0"); // Proxies
+	User users=(User) s.getAttribute("users");
+	if (users.getRole().equals("admin")) {
+	%>
 	<div class="sidebar">
 		<img style="padding-bottom: 30px;" width="230" height="150"
-			src="./img/logo.png" alt="Logo">
+			src="./img/logo.png" alt=""> <br>
 		<ul class="nav flex-column">
-			<li class="nav-item"><img width="30" height="30"
-				src="./img/addicon.png" alt="Complaints" /> <a class="nav-link"
-				href="#">Complaints</a></li>
-			<li class="nav-item"><img width="30" height="30"
-				src="./img/back.png" alt="Logout" /> <a class="nav-link" href="#">Back</a></li>
-		</ul>
-	</div>
+			<li class="nav-item">
+                <img width="30" height="30" src="img/search.png" alt="Profile" />
+                <a class="nav-link active" href="SearchTenantServlet" data-target="profile">View Tenant</a>
+            </li>
+            <li class="nav-item">
+                <img width="30" height="30" src="img/addicon.png" alt="Add Tenant" />
+                <a class="nav-link" href="addTenant.jsp">Add Tenant</a>
+            </li>
+            <li class="nav-item">
+                <img width="30" height="30" src="img/eb.png" alt="EB Bill" />
+                <a class="nav-link" href="EBbillServlet" data-target="addEBBill">Add EB-Bill</a>
+            </li>
+            <li class="nav-item">
+                <img width="30" height="30" src="img/visitor.png" alt="Visitors" />
+                <a class="nav-link" href="VisitorServlet" data-target="visitors">Visitors</a>
+            </li>
+            <li class="nav-item">
+                <img width="30" height="30" src="img/complain.png" alt="Complains" />
+                <a class="nav-link" href="complain.jsp" data-target="complains">Complains</a>
+            </li>
+            <li class="nav-item">
+                <img width="30" height="30" src="img/chat.png" alt="chat" />
+                <a class="nav-link" href="chat.jsp" data-target="chat">chat</a>
+            </li>
+            <li class="nav-item">
+                <img width="30" height="30" src="img/event.png" alt="Events" />
+                <a class="nav-link" href="event.jsp" data-target="addEvents">Add Events</a>
+            </li>
+            <li class="nav-item">
+                <img width="30" height="30" src="img/logout.png" alt="Logout" />
+                <a class="nav-link" href="LogoutServlet">Log-Out</a>
+            </li>
+        </ul>
+    </div>
 	<div class="content">
 		<div class="container-fluid">
 			<div class="container mt-5">
-				<h2 class="mb-4">Complaint Management</h2>
 				<%
 				if (complaints == null || complaints.isEmpty()) {
 				%>
@@ -101,7 +140,6 @@ h2 {
 				<table class="table table-bordered">
 					<thead class="thead-dark">
 						<tr>
-							<th>ID</th>
 							<th>Complaint Type</th>
 							<th>Comments</th>
 							<th>Complaint Date</th>
@@ -116,7 +154,6 @@ h2 {
 						for (Complain complaint : complaints) {
 						%>
 						<tr>
-							<td><%=complaint.getId()%></td>
 							<td><%=complaint.getComplainType()%></td>
 							<td><%=complaint.getComments()%></td>
 							<td><%=complaint.getComplainDate()%></td>
@@ -128,7 +165,7 @@ h2 {
 									onclick="showAssignWorkerModal(<%=complaint.getId()%>)">Assign
 									Worker</button>
 								<button class="btn btn-success btn-sm"
-									onclick="updateComplaintStatus(<%=complaint.getId()%>, 'Completed')">Mark
+									onclick="updateComplaintStatus(<%=complaint.getId()%>, 'Completed','deleteTask')">Mark
 									as Completed</button>
 							</td>
 						</tr>
@@ -154,7 +191,7 @@ h2 {
 								</button>
 							</div>
 							<div class="modal-body">
-								<form action="AssignWorkerServlet" method="post">
+								<form action="EmployeeServlet" method="post">
 									<div class="form-group">
 										<label for="workerSelect">Select Worker</label> <select
 											class="form-control" id="workerSelect" name="workerId"
@@ -163,13 +200,15 @@ h2 {
 											<%
 											for (Employee employee : employees) {
 											%>
-											<option value="<%=employee.getId()%>"><%=employee.getName()%></option>
+											<option value="<%=employee.getId()%>"><%=employee.getName()%>(<%=employee.getDepartment()%>)
+											</option>
 											<%
 											}
 											%>
 										</select>
 									</div>
 									<input type="hidden" id="currentComplaintId" name="complaintId">
+									<input type="hidden" name="action" value="assignWork">
 									<button type="submit" class="btn btn-primary">Assign</button>
 								</form>
 							</div>
@@ -201,7 +240,6 @@ h2 {
 						<table class="table table-sm">
 							<thead class="thead-dark">
 								<tr>
-									<th>ID</th>
 									<th>Name</th>
 									<th>Phone</th>
 									<th>Dept</th>
@@ -213,13 +251,10 @@ h2 {
 								for (Employee employee : employees) {
 								%>
 								<tr>
-									<td><%=employee.getId()%></td>
 									<td><%=employee.getName()%></td>
 									<td><%=employee.getPhoneNumber()%></td>
 									<td><%=employee.getDepartment()%></td>
 									<td>
-										<button class="btn btn-warning btn-sm"
-											onclick="showEditEmployeeModal(<%=employee.getId()%>)">Edit</button>
 										<button class="btn btn-danger btn-sm"
 											onclick="deleteEmployee(<%=employee.getId()%>,'deleteEmployee')">Delete</button>
 									</td>
@@ -261,7 +296,6 @@ h2 {
 									<th>ID</th>
 									<th>Description</th>
 									<th>Status</th>
-									<th>Actions</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -270,12 +304,8 @@ h2 {
 								%>
 								<tr>
 									<td><%=task.getId()%></td>
-									<td><%=task.getDescription()%></td>
-									<td><%=task.getStatus()%></td>
-									<td>
-										<button class="btn btn-danger btn-sm"
-											onclick="deleteTask(<%=task.getId()%>,'deleteEmployee')">Delete</button>
-									</td>
+									<td><%=task.getComments()%></td>
+									<td><%=task.getComplainStatus()%></td>
 								</tr>
 								<%
 								}
@@ -350,14 +380,128 @@ h2 {
 							<label for="taskStatus">Status</label> <input type="text"
 								class="form-control" id="taskStatus" name="status" required>
 						</div>
-						<button type="submit" class="btn btn-primary">Add</button>
 					</form>
 				</div>
 			</div>
 		</div>
 	</div>
+	<%
+	} else {
+	%>
+	<div class="sidebar">
+        <img style="padding-bottom: 30px;" width="230" height="150" src="img/logo.png" alt=""> <br>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <img width="30" height="30" src="img/search.png" alt="Profile" />
+                <a class="nav-link active" href="SearchTenantServlet" data-target="profile">Search</a>
+            </li>
+            <li class="nav-item">
+                <img width="30" height="30" src="img/eb.png" alt="EB Bill" />
+                <a class="nav-link" href="payment.jsp" data-target="addEBBill">payment</a>
+            </li>
+            <li class="nav-item">
+                <img width="30" height="30" src="img/complain.png" alt="Complains" />
+                <a class="nav-link" href="complain.jsp" data-target="complains">Complains</a>
+            </li>
+            <li class="nav-item">
+                <img width="30" height="30" src="img/chat.png" alt="chat" />
+                <a class="nav-link" href="chat.jsp" data-target="chat">chat</a>
+            </li>
+            <li class="nav-item">
+                <img width="30" height="30" src="img/event.png" alt="Events" />
+                <a class="nav-link" href="event.jsp" data-target="addEvents">Events</a>
+            </li>
+            <li class="nav-item">
+                <img width="30" height="30" src="img/logout.png" alt="Logout" />
+                <a class="nav-link" href="LogoutServlet">Log-Out</a>
+            </li>
+        </ul>
+    </div>
+	<div class="content">
+		<div class="container-fluid">
+			<div class="container mt-5">
+				<div class="container">
+					<h2 class="form-title text-primary">Raise a Complaint</h2>
+					<form id="complaintForm" action="EmployeeServlet" method="post">
+						<div class="form-group">
+							<label for="complainType">Complain Type</label> <select
+								class="form-control" id="complainType" name="complain_type"
+								required>
+								<option value="" disabled selected>Select complain type</option>
+								<option value="Plumbing">Plumbing</option>
+								<option value="Electrical">Electrical</option>
+								<option value="HVAC">HVAC</option>
+								<option value="Cleaning">Cleaning</option>
+								<!-- Add more options as needed -->
+							</select>
+						</div>
+						<div class="form-group">
+							<label for="comments">Comments</label>
+							<textarea class="form-control" id="comments" name="comments"
+								rows="3" placeholder="Describe your complaint..." required></textarea>
+						</div>
+						<div class="form-group">
+							<label for="complainDate">Complain Date</label> <input
+								type="date" class="form-control" id="complainDate"
+								name="complain_date" required>
+						</div>
+						<input type="hidden" value="addTask" name="action">
+						<button type="submit" class="btn btn-primary btn-block">Submit
+							Complaint</button>
+					</form>
+
+					<div class="complaint-status">
+						<button class="btn btn-secondary btn-block mt-4"
+							onclick="toggleComplaintStatus()">View Complaint Status</button>
+						<div id="complaintStatusTable" style="display: none;">
+							<%
+							if (complaints == null || complaints.isEmpty()) {
+							%>
+							<div class="alert alert-info" role="alert">No complaints
+								found.</div>
+							<%
+							} else {
+							%>
+							<table class="table table-bordered">
+								<thead class="thead-dark">
+									<tr>
+										<th>Complaint Type</th>
+										<th>Comments</th>
+										<th>Complaint Date</th>
+										<th>Status</th>
+										<th>Floor No</th>
+										<th>Door No</th>
+									</tr>
+								</thead>
+								<tbody>
+									<%
+									for (Complain complaint : complaints) {
+									%>
+									<tr>
+										<td><%=complaint.getComplainType()%></td>
+										<td><%=complaint.getComments()%></td>
+										<td><%=complaint.getComplainDate()%></td>
+										<td><%=complaint.getComplainStatus()%></td>
+										<td><%=complaint.getFloorNo()%></td>
+										<td><%=complaint.getDoorNo()%></td>
+									</tr>
+									<%
+									}
+									%>
+								</tbody>
+							</table>
+							<%
+							}
+							%>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
-	</div>
+	<%
+	}
+	%>
 
 	<!-- Scripts -->
 	<script src="https://kit.fontawesome.com/a076d05399.js"></script>
@@ -367,9 +511,19 @@ h2 {
 	<script
 		src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-		
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
 	<script>
-	
+	function toggleComplaintStatus() {
+        const complaintStatusTable = document.getElementById('complaintStatusTable');
+        if (complaintStatusTable.style.display === "none") {
+            complaintStatusTable.style.display = "block";
+        } else {
+            complaintStatusTable.style.display = "none";
+        }
+    }
         function toggleEmployeeTable() {
             const employeeSection = document.getElementById('employeeSection');
             employeeSection.style.display = (employeeSection.style.display === 'none' || employeeSection.style.display === '') ? 'block' : 'none';
@@ -394,9 +548,19 @@ h2 {
             $('#assignWorkerModal').modal('show');
         }
 
-        function updateComplaintStatus(complaintId, status) {
-            // Logic to update complaint status
-            // Repopulate the complaint table with updated data
+        function updateComplaintStatus(complaintId, status,action) {
+        	$.ajax({
+                url: 'EmployeeServlet',
+                type: 'POST',
+                data: { complaintId: complaintId,status: status,action: action },
+                success: function(response) {
+                    alert('Task deleted successfully');
+                    location.reload();
+                },
+                error: function(xhr, status, error) {
+                    alert('Failed to delete Task: ' + error);
+                }
+            });
         }
 
         function toggleTaskTable() {

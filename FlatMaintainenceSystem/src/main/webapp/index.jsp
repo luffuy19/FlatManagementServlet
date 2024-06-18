@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Navbar with Login and Register</title>
+<title>InamManagement</title>
 <!-- Bootstrap CSS -->
 <link
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
@@ -80,18 +80,12 @@ body {
 				aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
-			<div class="collapse navbar-collapse ml-auto" id="navbarNav">
+			<div class="collapse navbar-collapse justify-content-end"
+				id="navbarNav">
 				<ul class="navbar-nav">
-					<li class="nav-item"><a class="nav-link active"
-						aria-current="page" href="#">Home</a></li>
-					<li class="nav-item"><a class="nav-link" href="#">Features</a>
-					</li>
-					<li class="nav-item"><a class="nav-link" href="#">Pricing</a>
-					</li>
-					<li class="nav-item"><a class="nav-link" href="#">Contact</a>
-					</li>
+					<!-- Links or other navbar items go here -->
 				</ul>
-				<form class="d-flex">
+				<form class="form-inline my-2 my-lg-0 ml-auto">
 					<button class="btn btn-outline-light" type="button"
 						onclick="showModal('loginModal')">Login</button>
 					<button class="btn btn-outline-light ml-2" type="button"
@@ -100,6 +94,7 @@ body {
 			</div>
 		</div>
 	</nav>
+
 
 	<div id="loginModal" class="modal">
 		<div class="modal-content form-container">

@@ -44,4 +44,9 @@ public class FlatMaintainenceDao {
 		TrancistionDto trancistionDto = new TrancistionDto();
 		return trancistionDto.addEbBill(id, price, status);
 	}
+	 public static boolean tenantMatchesQuery(Tenant tenant, String query) {
+	        return tenant.getName().toLowerCase().contains(query.toLowerCase()) ||
+	               tenant.getPhoneNo().contains(query) ||
+	               tenant.getEmail().toLowerCase().contains(query.toLowerCase());
+	    }
 }

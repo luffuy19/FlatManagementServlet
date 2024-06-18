@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bootstrap Sidebar</title>
+<title>InamManagement</title>
 <!-- Bootstrap CSS -->
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 <style>
@@ -116,6 +116,13 @@ h2 {
 <body>
 	<%
 	HttpSession s = request.getSession(false);
+	if (session == null) {
+		response.sendRedirect("index.jsp");
+		return;
+	}
+	response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+	response.setHeader("Pragma", "no-cache"); // HTTP 1.0
+	response.setHeader("Expires", "0"); // Proxies
 	User users=(User) s.getAttribute("users");
 	if(users.getRole().equals("admin")) {
 	%>
@@ -123,16 +130,41 @@ h2 {
 		<img style="padding-bottom: 30px;" width="230" height="150"
 			src="./img/logo.png" alt=""> <br>
 		<ul class="nav flex-column">
-			<li class="nav-item"><img width="30" height="30"
-				src="./img/addicon.png" alt="Add Tenant" /> <a class="nav-link"
-				href="#" data-target="addTenant">Add Tenant</a>
+			<li class="nav-item">
+                <img width="30" height="30" src="img/search.png" alt="Profile" />
+                <a class="nav-link active" href="SearchTenantServlet" data-target="profile">View Tenant</a>
             </li>
-			<li class="nav-item"><img width="30" height="30"
-				src="./img/back.png" alt="Logout" /> 
-				<a class="nav-link" href="home.jsp" data-target="logout">Back</a>
+            <li class="nav-item">
+                <img width="30" height="30" src="img/addicon.png" alt="Add Tenant" />
+                <a class="nav-link" href="addTenant.jsp">Add Tenant</a>
             </li>
-		</ul>
-	</div>
+            <li class="nav-item">
+                <img width="30" height="30" src="img/eb.png" alt="EB Bill" />
+                <a class="nav-link" href="EBbillServlet" data-target="addEBBill">Add EB-Bill</a>
+            </li>
+            <li class="nav-item">
+                <img width="30" height="30" src="img/visitor.png" alt="Visitors" />
+                <a class="nav-link" href="VisitorServlet" data-target="visitors">Visitors</a>
+            </li>
+            <li class="nav-item">
+                <img width="30" height="30" src="img/complain.png" alt="Complains" />
+                <a class="nav-link" href="complain.jsp" data-target="complains">Complains</a>
+            </li>
+            <li class="nav-item">
+                <img width="30" height="30" src="img/chat.png" alt="chat" />
+                <a class="nav-link" href="chat.jsp" data-target="chat">chat</a>
+            </li>
+            <li class="nav-item">
+                <img width="30" height="30" src="img/event.png" alt="Events" />
+                <a class="nav-link" href="event.jsp" data-target="addEvents">Add Events</a>
+            </li>
+            <li class="nav-item">
+                <img width="30" height="30" src="img/logout.png" alt="Logout" />
+                <a class="nav-link" href="LogoutServlet">Log-Out</a>
+            </li>
+        </ul>
+    </div>
+		
 
 	<div class="content">
 		<div class="container-fluid">
@@ -156,7 +188,7 @@ h2 {
 						<input type="email" class="form-control" id="email" name="email" required>
 						<div class="invalid-feedback">Please enter the registered email.</div>
 					</div>
-
+					<label for="email" class="form-label">Photo</label> 
 					<div class="mb-3 custom-file-input-wrapper">
 						<label for="photo" class="form-label">Photo</label> 
 						<input type="file" class="form-control custom-file-input" id="photo" name="photo" required> 

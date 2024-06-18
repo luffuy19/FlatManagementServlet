@@ -2,12 +2,13 @@
 	pageEncoding="UTF-8"%>
 <%@ page import="com.chainsys.model.Tenant"%>
 <%@ page import="java.util.*"%>
+<%@ page import="com.chainsys.model.User"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bootstrap Sidebar</title>
+<title>InamManagement</title>
 <link
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
 	rel="stylesheet">
@@ -119,32 +120,70 @@ h2 {
 .tenant-header img {
 	margin-right: 20px;
 }
-
 </style>
 </head>
 <body>
+	<%
+	HttpSession s = request.getSession(false);
+	if (session == null) {
+		response.sendRedirect("index.jsp");
+		return;
+	}
+	response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+	response.setHeader("Pragma", "no-cache"); // HTTP 1.0
+	response.setHeader("Expires", "0"); // Proxies
+	User users = (User) s.getAttribute("users");
+	if (users.getRole().equals("admin"))
+	%>
 	<div class="sidebar">
 		<img style="padding-bottom: 30px;" width="230" height="150"
-			src="img/logo.png" alt=""> <br>
+			src="./img/logo.png" alt=""> <br>
 		<ul class="nav flex-column">
-			<li class="nav-item"><img width="30" height="30"
-				src="img/eb.png" alt="Add Tenant"> <a class="nav-link"
-				href="#" data-target="addTenant">Add EB Bill</a></li>
-			<li class="nav-item"><img width="30" height="30"
-				src="img/back.png" alt="Logout"> <a class="nav-link"
-				href="home.jsp" data-target="logout">Back</a></li>
-		</ul>
-	</div>
+			<li class="nav-item">
+                <img width="30" height="30" src="img/search.png" alt="Profile" />
+                <a class="nav-link active" href="SearchTenantServlet" data-target="profile">View Tenant</a>
+            </li>
+            <li class="nav-item">
+                <img width="30" height="30" src="img/addicon.png" alt="Add Tenant" />
+                <a class="nav-link" href="addTenant.jsp">Add Tenant</a>
+            </li>
+            <li class="nav-item">
+                <img width="30" height="30" src="img/eb.png" alt="EB Bill" />
+                <a class="nav-link" href="EBbillServlet" data-target="addEBBill">Add EB-Bill</a>
+            </li>
+            <li class="nav-item">
+                <img width="30" height="30" src="img/visitor.png" alt="Visitors" />
+                <a class="nav-link" href="VisitorServlet" data-target="visitors">Visitors</a>
+            </li>
+            <li class="nav-item">
+                <img width="30" height="30" src="img/complain.png" alt="Complains" />
+                <a class="nav-link" href="complain.jsp" data-target="complains">Complains</a>
+            </li>
+            <li class="nav-item">
+                <img width="30" height="30" src="img/chat.png" alt="chat" />
+                <a class="nav-link" href="chat.jsp" data-target="chat">chat</a>
+            </li>
+            <li class="nav-item">
+                <img width="30" height="30" src="img/event.png" alt="Events" />
+                <a class="nav-link" href="event.jsp" data-target="addEvents">Add Events</a>
+            </li>
+            <li class="nav-item">
+                <img width="30" height="30" src="img/logout.png" alt="Logout" />
+                <a class="nav-link" href="LogoutServlet">Log-Out</a>
+            </li>
+        </ul>
+    </div>
 
 	<div class="content">
 		<div class="container-fluid">
 			<div class="row mt-3">
 				<div class="col-md-6">
-					<form action="EBbillServlet" method="get">
+					<form action="EBbillServlet" method="post">
 						<div class="input-group">
 							<div class="input-group-prepend">
 								<span class="input-group-text" id="search-addon"><i
-									class="fa fa-search"></i></span>
+									class="fa fa-search"></i>
+								</span>
 							</div>
 							<input type="text" name="query" class="form-control"
 								placeholder="Search" aria-label="Search"
@@ -160,7 +199,7 @@ h2 {
 			</div>
 			<div class="container tenant-info">
 				<!-- Form for deleting tenants -->
-				<form action="EBbillServlet" method="post">
+				<form action="PaymentServlet" method="post">
 					<!-- Display search results here -->
 					<%
 					List<Tenant> tenantList = (List<Tenant>) request.getAttribute("tenantList");

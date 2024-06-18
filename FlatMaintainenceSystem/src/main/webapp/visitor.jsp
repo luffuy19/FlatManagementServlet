@@ -8,7 +8,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bootstrap Sidebar</title>
+<title>InamManagement</title>
 <link
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
 	rel="stylesheet">
@@ -174,28 +174,53 @@ h2 {
 		<img style="padding-bottom: 30px;" width="230" height="150"
 			src="./img/logo.png" alt=""> <br>
 		<ul class="nav flex-column">
-			<li class="nav-item"><img width="30" height="30"
-				src="./img/visitor.png" alt="Add Tenant" /> <a class="nav-link"
-				href="#" data-target="addTenant">Visitor</a></li>
-			<li class="nav-item"><img width="30" height="30"
-				src="./img/logout.png" alt="Logout" /> <a class="nav-link"
-				href="home.jsp" data-target="logout">Back</a></li>
-		</ul>
-	</div>
+			<li class="nav-item">
+                <img width="30" height="30" src="img/search.png" alt="Profile" />
+                <a class="nav-link active" href="SearchTenantServlet" data-target="profile">View Tenant</a>
+            </li>
+            <li class="nav-item">
+                <img width="30" height="30" src="img/addicon.png" alt="Add Tenant" />
+                <a class="nav-link" href="addTenant.jsp">Add Tenant</a>
+            </li>
+            <li class="nav-item">
+                <img width="30" height="30" src="img/eb.png" alt="EB Bill" />
+                <a class="nav-link" href="EBbillServlet" data-target="addEBBill">Add EB-Bill</a>
+            </li>
+            <li class="nav-item">
+                <img width="30" height="30" src="img/visitor.png" alt="Visitors" />
+                <a class="nav-link" href="VisitorServlet" data-target="visitors">Visitors</a>
+            </li>
+            <li class="nav-item">
+                <img width="30" height="30" src="img/complain.png" alt="Complains" />
+                <a class="nav-link" href="complain.jsp" data-target="complains">Complains</a>
+            </li>
+            <li class="nav-item">
+                <img width="30" height="30" src="img/chat.png" alt="chat" />
+                <a class="nav-link" href="chat.jsp" data-target="chat">chat</a>
+            </li>
+            <li class="nav-item">
+                <img width="30" height="30" src="img/event.png" alt="Events" />
+                <a class="nav-link" href="event.jsp" data-target="addEvents">Add Events</a>
+            </li>
+            <li class="nav-item">
+                <img width="30" height="30" src="img/logout.png" alt="Logout" />
+                <a class="nav-link" href="LogoutServlet">Log-Out</a>
+            </li>
+        </ul>
+    </div>
 	<div class="content">
 		<div class="container-fluid">
 			<div class="container mt-5">
-				<form action="Visitor" method="post">
+				<form action="Visitor" method="get">
 					<div class="btn-group btn-group-toggle" data-toggle="buttons">
-						<label class="btn btn-primary active"> <input type="radio"
-							name="options" id="option1" value="1" autocomplete="off" checked>
-							Today
+						<label class="btn btn-primary"> <input type="radio"
+							name="options" id="option3" value="1" autocomplete="off">Today
 						</label> <label class="btn btn-primary"> <input type="radio"
 							name="options" id="option2" value="7" autocomplete="off">
 							Last 7 Days
 						</label> <label class="btn btn-primary"> <input type="radio"
-							name="options" id="option3" value="30" autocomplete="off">
-							Last 30 Days
+							name="options" id="option3" value="30" autocomplete="off">Last
+							30 Days
 						</label>
 					</div>
 				</form>
@@ -341,51 +366,55 @@ h2 {
 	<script
 		src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 	<script>
-					document.addEventListener('DOMContentLoaded', () => {
-					    const addVisitorButton = document.getElementById('addVisitorButton');
-					    const outVisitorButtons = document.querySelectorAll('.outVisitorButton');
-					    const inVisitorFormContainer = document.getElementById('inVisitorFormContainer');
-					    const outVisitorFormContainer = document.getElementById('outVisitorFormContainer');
-					    const visitorForm = document.getElementById('visitorForm');
-					    const outVisitorForm = document.getElementById('outVisitorForm');
-					    const visitorIdField = document.getElementById('visitorId');
+	document.addEventListener('DOMContentLoaded', () => {
+	    const addVisitorButton = document.getElementById('addVisitorButton');
+	    const outVisitorButtons = document.querySelectorAll('.outVisitorButton');
+	    const inVisitorFormContainer = document.getElementById('inVisitorFormContainer');
+	    const outVisitorFormContainer = document.getElementById('outVisitorFormContainer');
+	    const visitorForm = document.getElementById('visitorForm');
+	    const outVisitorForm = document.getElementById('outVisitorForm');
+	    const visitorIdField = document.getElementById('visitorId');
 
-					    addVisitorButton.addEventListener('click', () => {
-					        inVisitorFormContainer.classList.toggle('hidden');
-					    });
+	    addVisitorButton.addEventListener('click', () => {
+	        inVisitorFormContainer.classList.toggle('hidden');
+	    });
 
-					    outVisitorButtons.forEach(button => {
-					        button.addEventListener('click', () => {
-					            const visitorId = button.getAttribute('data-id');
-					            visitorIdField.value = visitorId;
-					            outVisitorFormContainer.classList.toggle('hidden');
-					        });
-					    });
+	    outVisitorButtons.forEach(button => {
+	        button.addEventListener('click', () => {
+	            const visitorId = button.getAttribute('data-id');
+	            visitorIdField.value = visitorId;
+	            outVisitorFormContainer.classList.toggle('hidden');
+	        });
+	    });
 
-					    visitorForm.addEventListener('submit', (e) => {
-					        if (visitorForm.checkValidity() === false) {
-					            e.preventDefault();
-					            e.stopPropagation();
-					            visitorForm.classList.add('was-validated');
-					        } else {
-					            // If form is valid, allow the form to be submitted
-					            visitorForm.classList.remove('was-validated');
-					        }
-					    });
+	    visitorForm.addEventListener('submit', (e) => {
+	        if (visitorForm.checkValidity() === false) {
+	            e.preventDefault();
+	            e.stopPropagation();
+	            visitorForm.classList.add('was-validated');
+	        } else {
+	            // If form is valid, allow the form to be submitted
+	            visitorForm.classList.remove('was-validated');
+	        }
+	    });
 
-					    outVisitorForm.addEventListener('submit', (e) => {
-					        if (outVisitorForm.checkValidity() === false) {
-					            e.preventDefault();
-					            e.stopPropagation();
-					            outVisitorForm.classList.add('was-validated');
-					        } else {
-					            // If form is valid, allow the form to be submitted
-					            outVisitorForm.classList.remove('was-validated');
-					        }
-					    });
-					});
-
-       
+	    outVisitorForm.addEventListener('submit', (e) => {
+	        if (outVisitorForm.checkValidity() === false) {
+	            e.preventDefault();
+	            e.stopPropagation();
+	            outVisitorForm.classList.add('was-validated');
+	        } else {
+	            // If form is valid, allow the form to be submitted
+	            outVisitorForm.classList.remove('was-validated');
+	        }
+	    });
+	});
+	$(document).ready(function() {
+        $('input[name="options"]').on('change', function() {
+            var selectedOption = $(this).val();
+            window.location.href = 'VisitorServlet?checkIn=C&options=' + selectedOption;
+        });
+    });			
     </script>
 </body>
 </html>
