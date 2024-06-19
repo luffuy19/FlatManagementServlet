@@ -89,7 +89,6 @@ CREATE TABLE user_payments (
 );
 DELIMITER //
 
-CREATE PROCEDURE user_payments (IN p_user_id INT, OUT p_has_paid BOOLEAN)
 DELIMITER //
 
 CREATE PROCEDURE user_payments (IN p_user_id INT, OUT p_has_paid BOOLEAN)
@@ -97,7 +96,7 @@ BEGIN
     SET @start_date = DATE_FORMAT(NOW(), '%Y-%m-01');
     SET @end_date = LAST_DAY(NOW());
     
-    SELECT COUNT(*) > 0 INTO p_has_paid
+    SELECT COUNT(*) > 1 INTO p_has_paid
     FROM user_payments
     WHERE user_id = p_user_id AND payment_date BETWEEN @start_date AND @end_date;
 END //

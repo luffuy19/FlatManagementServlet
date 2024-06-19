@@ -141,7 +141,28 @@ public class TrancistionDto {
 		}
 		return tenantList;
 	}
-
+	public Tenant getSpecficTenants(int id) {
+		Tenant tenant = null;
+		try (Connection connection = Connectionutil.getConnections()) {
+			String sql = "SELECT id, name, phone_no, email, aadhaar_number, photo, family_members, flat_type, flat_floor, room_no, advance_amount, advance_status, rent_amount, rent_amount_status, eb_bill, eb_bill_status, date_of_joining, date_of_ending, delete_user, users_id FROM users_details Where delete_user=0 AND users_id=?";
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setInt(1,id);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				tenant = new Tenant(rs.getInt("id"), rs.getString("name"), rs.getString("phone_no"),
+						rs.getString("email"), rs.getString("aadhaar_number"), rs.getBytes("photo"),
+						rs.getInt("family_members"), rs.getString("flat_type"), rs.getString("flat_floor"),
+						rs.getString("room_no"), rs.getInt("advance_amount"), rs.getString("advance_status"),
+						rs.getInt("rent_amount"), rs.getString("rent_amount_status"), rs.getInt("eb_bill"),
+						rs.getString("eb_bill_status"), rs.getString("date_of_joining"), rs.getString("date_of_ending"),
+						rs.getString("delete_user"), rs.getInt("users_id"));
+				// Filter based on search criteria
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return tenant;
+	}
 	public int getTenantCount(String query) {
 		int count = 0;
 		try (Connection connection = Connectionutil.getConnections()) {
@@ -173,7 +194,7 @@ public class TrancistionDto {
 	}
 
 	public EBbillResponse addEbBill(int id, int newEbBill, String newEbBillStatus)
-			throws ClassNotFoundException, Exception {
+			throws Exception {
 		String query = "UPDATE users_details SET eb_bill = ?, eb_bill_status = ? WHERE id = ?";
 		try (Connection connection = Connectionutil.getConnections()) {
 			PreparedStatement statement = connection.prepareStatement(query);
@@ -395,20 +416,17 @@ public class TrancistionDto {
 			ps.executeUpdate();
 		}
 	}
-	@SuppressWarnings("unused")
 	public boolean checkUserPayment(int userId) throws ClassNotFoundException {
         boolean hasPaid = false;
         Connection conn = null;
         CallableStatement stmt = null;
 
         try {
-            
             conn = Connectionutil.getConnections();
-
-            String query = "{CALL user_payments(?)}";
+            String query = "{CALL user_payments(?,?)}";
             stmt = (CallableStatement) conn.prepareCall(query);
             stmt.setInt(1, userId);
-            
+            stmt.registerOutParameter(2, java.sql.Types.BOOLEAN); // Registering the output parameter
             stmt.execute();
 
             hasPaid = stmt.getBoolean(2);

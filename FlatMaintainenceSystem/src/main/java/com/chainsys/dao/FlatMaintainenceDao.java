@@ -15,18 +15,17 @@ public class FlatMaintainenceDao {
 	public User loginCheck(User user) throws ClassNotFoundException, SQLException {
 		TrancistionDto trancistionDto = new TrancistionDto();
 		User loginDetails = trancistionDto.loginDetails(user.getEmail());
-		if(loginDetails!=null) {
-			if((loginDetails.getEmail().equals(user.getEmail())) && (loginDetails.getPassword().equals(user.getPassword()))) {
+		if(loginDetails!=null && (loginDetails.getEmail().equals(user.getEmail())) && (loginDetails.getPassword().equals(user.getPassword()))) {
 				return loginDetails;
 			}
-		}
+		
 		return null;	
 	}
 	public int addTenant(Tenant tenant) throws ClassNotFoundException, SQLException {
 		TrancistionDto trancistionDto = new TrancistionDto();
 		return trancistionDto.addTenant(tenant);
 	}
-	public EBbillResponse addEbBill(int id,int unit) throws ClassNotFoundException, Exception {
+	public EBbillResponse addEbBill(int id,int unit) throws Exception {
 		int price ;
 		String status;
 		if(unit>100) {

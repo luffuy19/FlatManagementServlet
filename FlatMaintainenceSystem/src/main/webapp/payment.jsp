@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page import="com.chainsys.model.User"%>
+<%@ page import="com.chainsys.model.*"%>
+<%@ page import="com.chainsys.dto.*"%>
 <%@ page import="java.util.*"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -8,12 +9,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Payment Page</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <style>
 body {
 	font-family: 'Arial', sans-serif;
 	background-color: #f8f9fa;
+	overflow:hidden;
 }
 .event-card {
 	margin-bottom: 20px;
@@ -171,6 +174,31 @@ h1 {
 	background-color: #fff;
 	padding: 15px;
 }
+.payment-form {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    top: 116px;
+    left: 600px;
+}
+.payment-form1 {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    top: 230px;
+}
+.h3, h3 {
+    font-size: 1.75rem;
+    text-align: center;
+}
 </style>
 </head>
 <body>
@@ -183,6 +211,13 @@ h1 {
 	response.setHeader("Pragma", "no-cache"); // HTTP 1.0
 	response.setHeader("Expires", "0"); // Proxies
 	User users = (User) s.getAttribute("users");
+	
+	TrancistionDto trancistionDto = new TrancistionDto();
+	System.out.print(users.getId());
+	Tenant tenant=(Tenant)trancistionDto.getSpecficTenants(users.getId());
+	System.out.print(tenant);
+	int rent=tenant.getEbBill()+tenant.getRentAmount();
+	String hadPay=request.getParameter("payment");
 	%>
 	<div class="sidebar">
         <img style="padding-bottom: 30px;" width="230" height="150" src="img/logo.png" alt=""> <br>
@@ -214,25 +249,23 @@ h1 {
         </ul>
     </div>
 
+	<% if(hadPay.equals("1")) {%>
 	<div class="content">
-		<div class="container">
+		<div class="container">	
 			<div class="payment-options">
-				<div class="payment-form" id="paymentButtons">
+				<div class="payment-form1" id="paymentRentButtons">
 					<h3>Select Payment</h3>
 					<div class="payment-buttons">
-						<button type="button" class="btn btn-primary" onclick="showPaymentOptions('EB Bill')">Pay EB Bill</button>
-						<button type="button" class="btn btn-secondary" onclick="showPaymentOptions('Rent')">Pay Rent</button>
+						<button type="button" class="btn btn-primary" onclick="showRentPaymentOptions()">Pay <%= rent %></button>
 					</div>
 				</div>
-
+			</div>
 				<div class="payment-form" id="paymentOptions" style="display: none;">
 					<h3 id="paymentTitle"></h3>
 					<form id="paymentMethodForm">
 						<div class="form-check">
-							<input class="form-check-input" type="radio" name="paymentMethod"
-								id="debitCardOption" value="debit" checked> <label
-								class="form-check-label" for="debitCardOption"> Debit
-								Card </label>
+							<input class="form-check-input" type="radio" name="paymentMethod" id="debitCardOption" value="debit" checked> 
+							<label class="form-check-label" for="debitCardOption"> Debit Card </label>
 						</div>
 						<div class="form-check">
 							<input class="form-check-input" type="radio" name="paymentMethod"
@@ -267,17 +300,13 @@ h1 {
 				</div>
 			</div>
 		</div>
-	</div>
-
+		<% }
+		else {
+		%>
+		<h1>No Payment was found</h1>
+		<%} %>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script>
-        function showPaymentOptions(paymentType) {
-            $("#paymentButtons").hide();
-            $("#paymentTitle").text(paymentType);
-            $("#paymentOptions").show();
-            $("#cardDetailsSection").hide();
-            $("#paymentResultSection").hide();
-        }
-
         function submitPaymentMethod() {
             var paymentMethod = $("input[name='paymentMethod']:checked").val();
             if (paymentMethod === 'debit') {
@@ -287,6 +316,52 @@ h1 {
             }
             $("#paymentMethodForm").hide();
             $("#cardDetailsSection").show();
+        }
+        function showRentPaymentOptions() {
+            $("#paymentRentButtons").hide();
+            $("#paymentEbButtons").hide();
+            $("#paymentTitle").text("Rent");
+            $("#paymentOptions").show();
+            $("#cardDetailsSection").hide();
+            $("#paymentResultSection").hide();
+        }
+        function showEbPaymentOptions() {
+            $("#paymentRentButtons").hide();
+            $("#paymentEbButtons").hide();
+            $("#paymentTitle").text("EB Bill");
+            $("#paymentOptions").show();
+            $("#cardDetailsSection").hide();
+            $("#paymentResultSection").hide();
+        }
+        function submitPaymentMethod() {
+            var paymentMethod = $("input[name='paymentMethod']:checked").val();
+            if (paymentMethod === 'debit') {
+                $("#paymentMethodLabel").text("Debit Card Details");
+            } else {
+                $("#paymentMethodLabel").text("Credit Card Details");
+            }
+            $("#paymentMethodForm").hide();
+            $("#cardDetailsSection").show();
+        }
+        var $j = jQuery.noConflict();
+        function processPayment() {
+            $j.ajax({
+                url: "checkPayment",
+                type: "POST",
+                data: {
+                    payment: "ebill"
+                },
+                success: function(response) {
+                    if (response.success) {
+                        alert("Payment successful!");
+                    } else {
+                        alert("Payment failed. Please try again.");
+                    }
+                },
+                error: function() {
+                    alert("An error occurred. Please try again.");
+                }
+            });
         }
     </script>
 	<!-- Bootstrap JS and dependencies -->

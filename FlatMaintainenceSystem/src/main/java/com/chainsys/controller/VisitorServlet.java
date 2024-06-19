@@ -27,7 +27,6 @@ public class VisitorServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("get");
 		TrancistionDto dto = new TrancistionDto();
 		String day = request.getParameter("options");
 		try {
@@ -43,7 +42,6 @@ public class VisitorServlet extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("post");
 		String choice = request.getParameter("checkIn");
 		switch (choice) {
 		case "A": {

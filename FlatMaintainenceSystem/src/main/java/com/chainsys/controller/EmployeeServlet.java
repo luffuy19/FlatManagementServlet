@@ -21,6 +21,7 @@ import com.chainsys.model.User;
 public class EmployeeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// Get the form data
@@ -49,11 +50,9 @@ public class EmployeeServlet extends HttpServlet {
 			try {
 				dto.deleteEmployee(taskId);
 				response.sendRedirect("complain.jsp");
-			} catch (ClassNotFoundException e) {
+			} catch (ClassNotFoundException | SQLException e) {
 				e.printStackTrace();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			} 
 		case "assignWork":
 			int workerId = Integer.parseInt(request.getParameter("workerId"));
 			int complaintId = Integer.parseInt(request.getParameter("complaintId"));
