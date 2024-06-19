@@ -4,7 +4,7 @@
 <%@ page import="java.util.*"%>
 <%@ page import="com.chainsys.model.User"%>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="ISO-8859-1">
 <title>InamManagement</title>
@@ -198,7 +198,7 @@ h2 {
 				href="chat.jsp" data-target="chat">chat</a></li>
 			<li class="nav-item"><img width="30" height="30"
 				src="img/event.png" alt="Events" /> <a class="nav-link"
-				href="event.jsp" data-target="addEvents">Add Events</a></li>
+				href="EventServlet" data-target="addEvents">Add Events</a></li>
 			<li class="nav-item"><img width="30" height="30"
 				src="img/logout.png" alt="Logout" /> <a class="nav-link"
 				href="LogoutServlet">Log-Out</a></li>
@@ -211,27 +211,22 @@ h2 {
 				<div class="container">
 					<div class="row">
 						<div class="col-md-12">
-							<h2
-								style="display: flex; align-items: center; justify-content: center;">Upcoming
-								Events</h2>
+							<h2 class="text-center">Upcoming Events</h2>
 							<br>
-							<!-- Event list -->
 							<div id="eventList">
-								<!-- Events will be dynamically added here -->
-								<%-- For demonstration, static event data --%>
 								<%
-								List<Event> events = new ArrayList<>();
-								events.add(new Event(1, "Food Cookie", "Event description goes here.", "2024-07-15", "img/event.jpg"));
-								events.add(new Event(2, "Music Concert", "Concert featuring popular artists.", "2024-08-20", "img/event.jpg"));
-								events.add(new Event(3, "Art Exhibition", "Showcasing local art talent.", "2024-09-10", "img/event.jpg"));
-
+								List<Event> events = (List<Event>) request.getAttribute("events");
+								%>
+								<%
+								if (events != null) {
+								%>
+								<%
 								for (Event event : events) {
 								%>
 								<div class="card event-card">
 									<div class="row no-gutters">
 										<div class="col-md-4">
-											<img src="<%=event.getImageUrl()%>" class="card-img"
-												alt="Event Image">
+											<img src="img/logo.png" class="card-img" alt="Event">
 										</div>
 										<div class="col-md-8">
 											<div class="card-body">
@@ -240,77 +235,75 @@ h2 {
 												<p class="card-text">
 													<small class="text-muted">Event Date: <%=event.getDate()%></small>
 												</p>
-												<i class="fas fa-trash-alt delete-event-icon"
-													onClick="deleteEvent(<%=event.getId()%>)"
-													onKeyDown="if(event.key === 'Enter') { deleteEvent(<%=event.getId()%>); }"
-													role="button" tabindex="0"></i>
-
+												<form action="EventServlet" method="post">
+													<input type="hidden" name="action" value="delete">
+													<input type="hidden" name="eventId"
+														value="<%=event.getId()%>">
+													<button type="submit" class="btn btn-danger">Delete</button>
+												</form>
 											</div>
 										</div>
 									</div>
 								</div>
-								<%-- End loop --%>
+								<%
+								}
+								%>
 								<%
 								}
 								%>
 							</div>
 						</div>
 					</div>
-				</div>
-				<!-- Add Event button -->
-				<div class="add-event-icon">
-					<i class="fas fa-plus-circle" onClick="showAddEventModal()"
-						onKeyDown="showAddEventModal()" role="button" tabindex="0"></i>
 
-				</div>
+					<!-- Button to trigger add event modal -->
+					<button type="button" class="btn btn-primary add-event-btn"
+						data-toggle="modal" data-target="#addEventModal">Add
+						Event</button>
 
-				<!-- Modal for adding event -->
-				<div class="modal fade" id="addEventModal" tabindex="-1"
-					role="dialog" aria-labelledby="addEventModalLabel"
-					aria-hidden="true">
-					<div class="modal-dialog" role="document">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title" id="addEventModalLabel">Add Event</h5>
-								<button type="button" class="close" data-dismiss="modal"
-									aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-								</button>
-							</div>
-							<div class="modal-body">
-								<!-- Form to add event details -->
-								<form id="addEventForm" method="post" action="AddEventServlet"
-									enctype="multipart/form-data">
-									<div class="form-group">
-										<label for="eventTitle">Event Title</label> <input type="text"
-											class="form-control" id="eventTitle" name="eventTitle"
-											required>
-									</div>
-									<div class="form-group">
-										<label for="eventDescription">Event Description</label>
-										<textarea class="form-control" id="eventDescription"
-											name="eventDescription" rows="3" required></textarea>
-									</div>
-									<div class="form-group">
-										<label for="eventDate">Event Date</label> <input type="date"
-											class="form-control" id="eventDate" name="eventDate" required>
-									</div>
-									<div class="form-group">
-										<label for="eventLocation">Event Location</label> <input
-											type="text" class="form-control" id="eventLocation"
-											name="eventLocation" required>
-									</div>
-									<div class="form-group">
-										<label for="eventImage">Event Image</label> <input type="file"
-											class="form-control-file" id="eventImage" name="eventImage"
-											accept="image/*">
-									</div>
-									<button type="submit" class="btn btn-primary">Add
-										Event</button>
-								</form>
+					<!-- Add Event Modal -->
+					<div class="modal fade" id="addEventModal" tabindex="-1"
+						role="dialog" aria-labelledby="addEventModalLabel"
+						aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="addEventModalLabel">Add New
+										Event</h5>
+									<button type="button" class="close" data-dismiss="modal"
+										aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<form action="AddEventServlet" method="post" >
+										<div class="form-group">
+											<label for="eventTitle">Title</label> <input type="text"
+												class="form-control" id="eventTitle" name="eventTitle"
+												required>
+										</div>
+										<div class="form-group">
+											<label for="eventDescription">Description</label>
+											<textarea class="form-control" id="eventDescription"
+												name="eventDescription" rows="3" required></textarea>
+										</div>
+										<div class="form-group">
+											<label for="eventDate">Date</label> <input type="date"
+												class="form-control" id="eventDate" name="eventDate"
+												required>
+										</div>
+										<div class="form-group">
+											<label for="eventLocation">Location</label> <input
+												type="text" class="form-control" id="eventLocation"
+												name="eventLocation">
+										</div>
+										<button type="submit" class="btn btn-primary">Add
+											Event</button>
+									</form>
+								</div>
 							</div>
 						</div>
 					</div>
+
 				</div>
 			</div>
 		</div>
@@ -342,6 +335,58 @@ h2 {
 				href="LogoutServlet">Log-Out</a></li>
 		</ul>
 	</div>
+	<div class="content">
+		<div class="container-fluid">
+			<div class="row mt-3">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-12">
+							<h2 class="text-center">Upcoming Events</h2>
+							<br>
+							<div id="eventList">
+								<%
+								List<Event> events = (List<Event>) request.getAttribute("events");
+								%>
+								<%
+								if (events != null) {
+								%>
+								<%
+								for (Event event : events) {
+								%>
+								<div class="card event-card">
+									<div class="row no-gutters">
+										<div class="col-md-4">
+											<img src="img/logo.png" class="card-img" alt="Event">
+										</div>
+										<div class="col-md-8">
+											<div class="card-body">
+												<h5 class="card-title"><%=event.getTitle()%></h5>
+												<p class="card-text"><%=event.getDescription()%></p>
+												<p class="card-text">
+													<small class="text-muted">Event Date: <%=event.getDate()%></small>
+												</p>
+												<form action="EventServlet" method="post">
+													<input type="hidden" name="action" value="delete">
+													<input type="hidden" name="eventId"
+														value="<%=event.getId()%>">
+												</form>
+											</div>
+										</div>
+									</div>
+								</div>
+								<%
+								}
+								%>
+								<%
+								}
+								%>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 	<%
 	}
 	%>
@@ -356,16 +401,16 @@ h2 {
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
 	<script>
-        function showAddEventModal() {
-            $('#addEventModal').modal('show');
-        }
+		function showAddEventModal() {
+			$('#addEventModal').modal('show');
+		}
 
-        function deleteEvent(eventId) {
-            console.log('Deleting event with ID:', eventId);
-            // Simulate deletion, replace with AJAX call to servlet
-            // For demonstration purpose, reload the page after deletion
-            window.location.reload();
-        }
-    </script>
+		function deleteEvent(eventId) {
+			console.log('Deleting event with ID:', eventId);
+			// Simulate deletion, replace with AJAX call to servlet
+			// For demonstration purpose, reload the page after deletion
+			window.location.reload();
+		}
+	</script>
 </body>
 </html>

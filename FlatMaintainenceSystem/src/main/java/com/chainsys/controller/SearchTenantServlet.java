@@ -15,6 +15,7 @@ import com.chainsys.model.Tenant;
 public class SearchTenantServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String query = request.getParameter("query");
         int page = 1;
@@ -41,6 +42,8 @@ public class SearchTenantServlet extends HttpServlet {
         request.setAttribute("query", query);
         request.getRequestDispatcher("search.jsp").forward(request, response);
     }
+    
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String query = request.getParameter("query");
         int page = 1;

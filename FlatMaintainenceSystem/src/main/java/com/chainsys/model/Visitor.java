@@ -15,7 +15,7 @@ public class Visitor implements Serializable {
     String roomNo;
     String timestamp ;
 	public Visitor(int id, String visitorName, String inTime, String outTime, String inDate, String outDate,
-			int flatFloor, String room_no, String timestamp) {
+			int flatFloor, String roomNo, String timestamp) {
 		super();
 		this.id = id;
 		this.visitorName = visitorName;
@@ -24,7 +24,7 @@ public class Visitor implements Serializable {
 		this.inDate = inDate;
 		this.outDate = outDate;
 		this.flatFloor = flatFloor;
-		this.roomNo = room_no;
+		this.roomNo = roomNo;
 		this.timestamp = timestamp;
 	}
 	public static long getSerialversionuid() {

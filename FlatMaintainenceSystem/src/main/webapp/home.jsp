@@ -178,7 +178,7 @@ h2 {
             </li>
             <li class="nav-item">
                 <img width="30" height="30" src="img/event.png" alt="Events" />
-                <a class="nav-link" href="event.jsp" data-target="addEvents">Add Events</a>
+                <a class="nav-link" href="EventServlet" data-target="addEvents">Add Events</a>
             </li>
             <li class="nav-item">
                 <img width="30" height="30" src="img/logout.png" alt="Logout" />
@@ -209,7 +209,7 @@ h2 {
             </li>
             <li class="nav-item">
                 <img width="30" height="30" src="img/event.png" alt="Events" />
-                <a class="nav-link" href="event.jsp" data-target="addEvents">Events</a>
+                <a class="nav-link" href="EventServlet" data-target="addEvents">Events</a>
             </li>
             <li class="nav-item">
                 <img width="30" height="30" src="img/logout.png" alt="Logout" />

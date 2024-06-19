@@ -32,7 +32,7 @@ public class VisitorServlet extends HttpServlet {
 		try {
 			List<Visitor> viewVisitor = dto.viewVisitor(day);
 			request.setAttribute("visitor", viewVisitor);
-			request.getRequestDispatcher("visitor.jsp").forward(request, response);;
+			request.getRequestDispatcher("visitor.jsp").forward(request, response);
 
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
@@ -58,6 +58,7 @@ public class VisitorServlet extends HttpServlet {
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			}
+	        break;
 		}
 		case "B" : {
 			int id =Integer.parseInt(request.getParameter("visitorId"));
@@ -71,7 +72,9 @@ public class VisitorServlet extends HttpServlet {
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			}
+	        break;
 		}
+		default : 
 		}
 	}
 

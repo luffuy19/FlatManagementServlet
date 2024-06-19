@@ -1,7 +1,6 @@
 package com.chainsys.controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
 
 import javax.servlet.ServletException;
@@ -18,6 +17,7 @@ import com.chainsys.model.User;
 public class PaymentProcessingServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.setContentType("text/html");
@@ -36,33 +36,16 @@ public class PaymentProcessingServlet extends HttpServlet {
 		} else {
 			response.sendRedirect("payment.jsp?payment=0");
 		}
-//		String choice = request.getParameter("payment");
-//		switch (choice) {
-//		case "ebBill":
-//			TrancistionDto dto = new TrancistionDto();
-//			boolean hasPaid = false;
-//			try {
-//				hasPaid = dto.checkUserPayment(user.getId());
-//			} catch (ClassNotFoundException e) {
-//				e.printStackTrace();
-//			}
-//
-//			if (!hasPaid) {
-//				response.sendRedirect("payment.jsp");
-//			} else {
-//				out.println("<h2>You have already paid for this month.</h2>");
-//			}
-//			break;
-//		}
 
 	}
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
 		User user = (User) session.getAttribute("users");
 		TrancistionDto dto = new TrancistionDto();
 		try {
-			 boolean processPayment = dto.processPayment(user.getId());
+			 dto.processPayment(user.getId());
 			 doGet(request, response);
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();

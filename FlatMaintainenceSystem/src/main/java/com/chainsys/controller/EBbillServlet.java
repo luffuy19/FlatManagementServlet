@@ -8,12 +8,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.chainsys.dao.FlatMaintainenceDao;
 import com.chainsys.dto.TrancistionDto;
 import com.chainsys.model.Tenant;
-
-import javax.servlet.RequestDispatcher;
 
 @WebServlet("/EBbillServlet")
 public class EBbillServlet extends HttpServlet {

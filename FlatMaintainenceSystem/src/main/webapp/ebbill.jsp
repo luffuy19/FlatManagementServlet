@@ -215,7 +215,7 @@ h2 {
 					<div class="tenant-header mb-4">
 						<img
 							src="data:image/jpeg;base64,<%=Base64.getEncoder().encodeToString(tenant.getPhoto())%>"
-							alt="Tenant Photo" class="img-thumbnail" id="tenantPhoto">
+							alt="Tenant" class="img-thumbnail" id="tenantPhoto">
 						<div>
 							<h2><%=tenant.getName()%></h2>
 							<div class="info-item">

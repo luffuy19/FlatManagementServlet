@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ page import="com.chainsys.model.Tenant"%>
 <%@ page import="com.chainsys.model.User"%>
+<%@ page import="com.chainsys.dto.*"%>
 <%@ page import="java.util.*"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -212,7 +213,7 @@ h2 {
 				<div class="tenant-header mb-4">
 					<img
 						src="data:image/jpeg;base64,<%=Base64.getEncoder().encodeToString(tenant.getPhoto())%>"
-						alt="Tenant Photo" class="img-thumbnail" id="tenantPhoto">
+						alt="Tenant" class="img-thumbnail" id="tenantPhoto">
 					<div>
 						<h2><%=tenant.getName()%></h2>
 						<div class="info-item">
@@ -332,11 +333,23 @@ h2 {
 			src="img/logo.png" alt=""> <br>
 		<ul class="nav flex-column">
 			<li class="nav-item"><img width="30" height="30"
-				src="img/addicon.png" alt="Add Tenant"> <a class="nav-link"
-				href="#" data-target="addTenant">View Tenant</a></li>
+				src="img/profileicon.png" alt="Profile" /> <a class="nav-link active"
+				href="SearchTenantServlet" data-target="profile">Profile</a></li>
 			<li class="nav-item"><img width="30" height="30"
-				src="img/back.png" alt="Logout"> <a class="nav-link"
-				href="home.jsp" data-target="logout">Back</a></li>
+				src="img/eb.png" alt="EB Bill" /> <a class="nav-link"
+				href="payment.jsp" data-target="addEBBill">payment</a></li>
+			<li class="nav-item"><img width="30" height="30"
+				src="img/complain.png" alt="Complains" /> <a class="nav-link"
+				href="complain.jsp" data-target="complains">Complains</a></li>
+			<li class="nav-item"><img width="30" height="30"
+				src="img/chat.png" alt="chat" /> <a class="nav-link"
+				href="chat.jsp" data-target="chat">chat</a></li>
+			<li class="nav-item"><img width="30" height="30"
+				src="img/event.png" alt="Events" /> <a class="nav-link"
+				href="EventServlet" data-target="addEvents">Events</a></li>
+			<li class="nav-item"><img width="30" height="30"
+				src="img/logout.png" alt="Logout" /> <a class="nav-link"
+				href="LogoutServlet">Log-Out</a></li>
 		</ul>
 	</div>
 
@@ -365,20 +378,17 @@ h2 {
 			<div class="container tenant-info">
 				<!-- Display search results here -->
 				<%
-				List<Tenant> tenantList = (List<Tenant>) request.getAttribute("tenantList");
-				Integer currentPageObj = (Integer) request.getAttribute("currentPage");
-				int currentPage = (currentPageObj != null) ? currentPageObj.intValue() : 1;
-				Integer totalPagesObj = (Integer) request.getAttribute("totalPages");
-				int totalPages = (totalPagesObj != null) ? totalPagesObj.intValue() : 1;
-				String query = (String) request.getAttribute("query");
+				TrancistionDto trancistionDto = new TrancistionDto();
+				System.out.print(users.getId());
+				Tenant tenant = (Tenant) trancistionDto.getSpecficTenants(users.getId());
 
-				if (tenantList != null && !tenantList.isEmpty()) {
-					for (Tenant tenant : tenantList) {
+				if (tenant != null) {
 				%>
+				
 				<div class="tenant-header mb-4">
 					<img
 						src="data:image/jpeg;base64,<%=Base64.getEncoder().encodeToString(tenant.getPhoto())%>"
-						alt="Tenant Photo" class="img-thumbnail" id="tenantPhoto">
+						alt="Tenant" class="img-thumbnail" id="tenantPhoto">
 					<div>
 						<h2><%=tenant.getName()%></h2>
 						<div class="info-item">
@@ -386,6 +396,12 @@ h2 {
 						</div>
 					</div>
 				</div>
+				<form action="DeleteServlet" method="post">
+					<div class="mb-4">
+						<input type="hidden" value="<%=tenant.getId()%>" name="deleteId">
+						<button type="submit" name="deleteTenant" class="btn btn-primary">Edit Photo</button>
+					</div>
+				</form>
 				<div class="row">
 					<div class="col-md-12 mb-4">
 						<div class="card">
@@ -438,56 +454,13 @@ h2 {
 						</div>
 					</div>
 				</div>
-				<!-- Delete Button -->
-				<form action="DeleteServlet" method="post">
-					<div class="mb-4">
-						<input type="hidden" value="<%=tenant.getId()%>" name="deleteId">
-						<button type="submit" name="deleteTenant" class="btn btn-danger">Delete
-							Account</button>
-					</div>
-				</form>
 				<%
-				}
 				} else {
 				%>
 				<p>No tenants found.</p>
 				<%
 				}
 				%>
-				<!-- Pagination Controls -->
-				<nav aria-label="Page navigation example">
-					<ul class="pagination">
-						<%
-						if (currentPage > 1) {
-						%>
-						<li class="page-item"><a class="page-link"
-							href="SearchTenantServlet?query=<%=query%>&page=<%=currentPage - 1%>"
-							aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
-						</a></li>
-						<%
-						}
-						for (int i = 1; i <= totalPages; i++) {
-						%>
-						<li class="page-item <%=(i == currentPage) ? "active" : ""%>">
-							<a class="page-link"
-							href="SearchTenantServlet?query=<%=query%>&page=<%=i%>"><%=i%></a>
-						</li>
-						<%
-						}
-						if (currentPage < totalPages) {
-						%>
-						<li class="page-item"><a class="page-link"
-							href="SearchTenantServlet?query=<%=query%>&page=<%=currentPage + 1%>"
-							aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-						</a></li>
-						<%
-						}
-						%>
-					</ul>
-				</nav>
-			</div>
-		</div>
-	</div>
 	<%} %>
 
 	<!-- Bootstrap JS and dependencies -->

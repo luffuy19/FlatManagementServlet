@@ -25,16 +25,14 @@ public class LoginServlet extends HttpServlet {
 		User user = new User();
 		user.setEmail(request.getParameter("loginEmail"));
 		user.setPassword(request.getParameter("loginPassword"));
-		System.out.println(user.getEmail());
 		FlatMaintainenceDao dao = new FlatMaintainenceDao();
 		try {
 			User loginCheck = dao.loginCheck(user);
 			if(loginCheck!=null) {
 				HttpSession session = request.getSession();
 				session.setAttribute("users", loginCheck);
-				if (loginCheck.getRole().equals("admin")) {
+				if(loginCheck.getRole().equals("admin")) 
 		            response.sendRedirect("home.jsp");
-				}
 				else {
 					response.sendRedirect("home.jsp");
 				}

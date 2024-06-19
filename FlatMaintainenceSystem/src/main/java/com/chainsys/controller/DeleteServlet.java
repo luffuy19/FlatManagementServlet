@@ -22,7 +22,6 @@ public class DeleteServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		int id = Integer.parseInt(request.getParameter("deleteId"));
-		System.out.println(request.getParameter("deleteId"));
 		TrancistionDto dto = new TrancistionDto();
 		try {
 			dto.deleteTenant(id);

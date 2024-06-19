@@ -53,6 +53,7 @@ public class EmployeeServlet extends HttpServlet {
 			} catch (ClassNotFoundException | SQLException e) {
 				e.printStackTrace();
 			} 
+		break;	
 		case "assignWork":
 			int workerId = Integer.parseInt(request.getParameter("workerId"));
 			int complaintId = Integer.parseInt(request.getParameter("complaintId"));
@@ -90,6 +91,8 @@ public class EmployeeServlet extends HttpServlet {
 			} catch (ClassNotFoundException | SQLException e) {
 				e.printStackTrace();
 			}
+			break;
+		default : 	
 		}
 
 	}

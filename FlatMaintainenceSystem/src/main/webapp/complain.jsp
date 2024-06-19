@@ -13,7 +13,7 @@ List<Employee> employees = (List<Employee>) dto.getAllEmployees();
 List<Task> tasks = (List<Task>) dto.getAllTasks();
 %>
 <!DOCTYPE html>
-<html>
+<html lang="en" >
 <head>
 <meta charset="ISO-8859-1">
 <title>InamManagement</title>

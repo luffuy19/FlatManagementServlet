@@ -37,22 +37,55 @@ public class TrancistionDto {
 	}
 
 	public User loginDetails(String email) throws SQLException, ClassNotFoundException {
-		Connection con = Connectionutil.getConnections();
-		String query = "SELECT id,email,password,role FROM users where email=?";
-		PreparedStatement statement = con.prepareStatement(query);
-		statement.setString(1, email);
-		ResultSet rs = statement.executeQuery();
-		while (rs.next()) {
-			User user = new User();
-			int id = Integer.parseInt(rs.getString("id"));
-			user.setId(id);
-			user.setEmail(rs.getString("email"));
-			user.setPassword(rs.getString("password"));
-			user.setRole(rs.getString("role"));
-			return user;
-		}
-		return null;
+	    Connection con = null;
+	    PreparedStatement statement = null;
+	    ResultSet rs = null;
+	    User user = null;
+	    
+	    try {
+	        con = Connectionutil.getConnections();
+	        String query = "SELECT id, email, password, role FROM users WHERE email=?";
+	        statement = con.prepareStatement(query);
+	        statement.setString(1, email);
+	        rs = statement.executeQuery();
+	        
+	        if (rs.next()) {
+	            user = new User();
+	            int id = rs.getInt("id");
+	            user.setId(id);
+	            user.setEmail(rs.getString("email"));
+	            user.setPassword(rs.getString("password"));
+	            user.setRole(rs.getString("role"));
+	        }
+	        
+	    } finally {
+	        // Close resources in finally block to ensure they are always closed
+	        if (rs != null) {
+	            try {
+	                rs.close();
+	            } catch (SQLException e) {
+	                e.printStackTrace();
+	            }
+	        }
+	        if (statement != null) {
+	            try {
+	                statement.close();
+	            } catch (SQLException e) {
+	                e.printStackTrace();
+	            }
+	        }
+	        if (con != null) {
+	            try {
+	                con.close();
+	            } catch (SQLException e) {
+	                e.printStackTrace();
+	            }
+	        }
+	    }
+	    
+	    return user;
 	}
+
 
 	public int addTenant(Tenant tenant) throws ClassNotFoundException, SQLException {
 		Connection con = Connectionutil.getConnections();
@@ -88,7 +121,7 @@ public class TrancistionDto {
 		PreparedStatement statement = con.prepareStatement(query);
 		statement.setString(1, email);
 		ResultSet rs = statement.executeQuery();
-		while (rs.next()) {
+		if (rs.next()) {
 			return Integer.parseInt(rs.getString("id"));
 		}
 		return 0;
@@ -234,7 +267,6 @@ public class TrancistionDto {
 			statement.setString(2, visitor.getOutDate());
 			statement.setInt(3, visitor.getId());
 			int executeUpdate = statement.executeUpdate();
-			System.out.println(executeUpdate);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -273,7 +305,7 @@ public class TrancistionDto {
 
 	public List<Employee> getAllEmployees() throws SQLException, ClassNotFoundException {
 		List<Employee> employees = new ArrayList<>();
-		String query = "SELECT * FROM employee";
+		String query = "SELECT id, name, phone_number, department FROM employee";
 		Connection connection = Connectionutil.getConnections();
 		try (PreparedStatement statement = connection.prepareStatement(query)) {
 			ResultSet resultSet = statement.executeQuery();
@@ -468,7 +500,7 @@ public class TrancistionDto {
             e.printStackTrace();
         } finally {
             try { if (statement != null) statement.close(); } catch (Exception e) { e.printStackTrace(); }
-            try { if (conn != null) conn.close(); } catch (Exception e) { e.printStackTrace(); }
+            try {  conn.close(); } catch (Exception e) { e.printStackTrace(); }
         }
         return success;
     }

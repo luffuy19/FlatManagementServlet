@@ -106,7 +106,7 @@ public class Tenant {
 	public String getDeleteUser() {
 		return deleteUser;
 	}
-	public int getUser_id() {
+	public int getUserId() {
 		return user_id;
 	}
 	public String toString() {
