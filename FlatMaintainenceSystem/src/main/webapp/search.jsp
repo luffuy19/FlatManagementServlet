@@ -121,10 +121,18 @@ h2 {
 .tenant-header img {
 	margin-right: 20px;
 }
+.edit {
+    display: block;
+    margin: 0 auto; /* Center the button horizontally */
+    margin-top: 10px; /* Add some space above the button */
+    position: absolute;
+    top: 280px;
+    left: 346px;
+}
 </style>
 </head>
 <body>
-<%
+	<%
 	HttpSession s = request.getSession(false);
 	if (session == null) {
 		response.sendRedirect("index.jsp");
@@ -133,47 +141,39 @@ h2 {
 	response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
 	response.setHeader("Pragma", "no-cache"); // HTTP 1.0
 	response.setHeader("Expires", "0"); // Proxies
-	User users=(User) s.getAttribute("users");
+	User users = (User) s.getAttribute("users");
 	if (users.getRole().equals("admin")) {
 	%>
 	<div class="sidebar">
 		<img style="padding-bottom: 30px;" width="230" height="150"
 			src="./img/logo.png" alt=""> <br>
 		<ul class="nav flex-column">
-			<li class="nav-item">
-                <img width="30" height="30" src="img/search.png" alt="Profile" />
-                <a class="nav-link active" href="SearchTenantServlet" data-target="profile">View Tenant</a>
-            </li>
-            <li class="nav-item">
-                <img width="30" height="30" src="img/addicon.png" alt="Add Tenant" />
-                <a class="nav-link" href="addTenant.jsp">Add Tenant</a>
-            </li>
-            <li class="nav-item">
-                <img width="30" height="30" src="img/eb.png" alt="EB Bill" />
-                <a class="nav-link" href="EBbillServlet" data-target="addEBBill">Add EB-Bill</a>
-            </li>
-            <li class="nav-item">
-                <img width="30" height="30" src="img/visitor.png" alt="Visitors" />
-                <a class="nav-link" href="VisitorServlet" data-target="visitors">Visitors</a>
-            </li>
-            <li class="nav-item">
-                <img width="30" height="30" src="img/complain.png" alt="Complains" />
-                <a class="nav-link" href="complain.jsp" data-target="complains">Complains</a>
-            </li>
-            <li class="nav-item">
-                <img width="30" height="30" src="img/chat.png" alt="chat" />
-                <a class="nav-link" href="chat.jsp" data-target="chat">chat</a>
-            </li>
-            <li class="nav-item">
-                <img width="30" height="30" src="img/event.png" alt="Events" />
-                <a class="nav-link" href="event.jsp" data-target="addEvents">Add Events</a>
-            </li>
-            <li class="nav-item">
-                <img width="30" height="30" src="img/logout.png" alt="Logout" />
-                <a class="nav-link" href="LogoutServlet">Log-Out</a>
-            </li>
-        </ul>
-    </div>
+			<li class="nav-item"><img width="30" height="30"
+				src="img/search.png" alt="Profile" /> <a class="nav-link active"
+				href="SearchTenantServlet" data-target="profile">View Tenant</a></li>
+			<li class="nav-item"><img width="30" height="30"
+				src="img/addicon.png" alt="Add Tenant" /> <a class="nav-link"
+				href="addTenant.jsp">Add Tenant</a></li>
+			<li class="nav-item"><img width="30" height="30"
+				src="img/eb.png" alt="EB Bill" /> <a class="nav-link"
+				href="EBbillServlet" data-target="addEBBill">Add EB-Bill</a></li>
+			<li class="nav-item"><img width="30" height="30"
+				src="img/visitor.png" alt="Visitors" /> <a class="nav-link"
+				href="VisitorServlet" data-target="visitors">Visitors</a></li>
+			<li class="nav-item"><img width="30" height="30"
+				src="img/complain.png" alt="Complains" /> <a class="nav-link"
+				href="complain.jsp" data-target="complains">Complains</a></li>
+			<li class="nav-item"><img width="30" height="30"
+				src="img/chat.png" alt="chat" /> <a class="nav-link"
+				href="chat.jsp" data-target="chat">chat</a></li>
+			<li class="nav-item"><img width="30" height="30"
+				src="img/event.png" alt="Events" /> <a class="nav-link"
+				href="event.jsp" data-target="addEvents">Add Events</a></li>
+			<li class="nav-item"><img width="30" height="30"
+				src="img/logout.png" alt="Logout" /> <a class="nav-link"
+				href="LogoutServlet">Log-Out</a></li>
+		</ul>
+	</div>
 
 	<div class="content">
 		<div class="container-fluid">
@@ -189,13 +189,14 @@ h2 {
 								placeholder="Search" aria-label="Search"
 								aria-describedby="search-addon">
 						</div>
+					</form>
 				</div>
 				<div class="col-md-3">
 					<div class="input-group">
 						<button type="submit" class="btn btn-dark">Search</button>
 					</div>
 				</div>
-				</form>
+
 			</div>
 			<div class="container tenant-info">
 				<!-- Display search results here -->
@@ -227,23 +228,23 @@ h2 {
 							<div class="card-header">Personal Information</div>
 							<div class="card-body">
 								<div class="info-item">
-										<strong>Aadhaar Number:</strong> <span><%=tenant.getAadhaarNumber()%></span>
-									</div>
-									<div class="info-item">
-										<strong>Email:</strong> <span><%=tenant.getEmail()%></span>
-									</div>
-									<div class="info-item">
-										<strong>Flat Type:</strong> <span><%=tenant.getFlatType()%></span>
-									</div>
-									<div class="info-item">
-										<strong>Flat Floor:</strong> <span><%=tenant.getFlatFloor()%></span>
-									</div>
-									<div class="info-item">
-										<strong>Family Members:</strong> <span><%=tenant.getFamilyNembers()%></span>
-									</div>
-									<div class="info-item">
-										<strong>Date of Joining:</strong> <span><%=tenant.getDateOfJoining()%></span>
-									</div>
+									<strong>Aadhaar Number:</strong> <span><%=tenant.getAadhaarNumber()%></span>
+								</div>
+								<div class="info-item">
+									<strong>Email:</strong> <span><%=tenant.getEmail()%></span>
+								</div>
+								<div class="info-item">
+									<strong>Flat Type:</strong> <span><%=tenant.getFlatType()%></span>
+								</div>
+								<div class="info-item">
+									<strong>Flat Floor:</strong> <span><%=tenant.getFlatFloor()%></span>
+								</div>
+								<div class="info-item">
+									<strong>Family Members:</strong> <span><%=tenant.getFamilyNembers()%></span>
+								</div>
+								<div class="info-item">
+									<strong>Date of Joining:</strong> <span><%=tenant.getDateOfJoining()%></span>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -274,7 +275,7 @@ h2 {
 					</div>
 				</div>
 				<!-- Delete Button -->
-				<form action="DeleteServlet" method="post">
+				<form action="DeleteServlet" method="get">
 					<div class="mb-4">
 						<input type="hidden" value="<%=tenant.getId()%>" name="deleteId">
 						<button type="submit" name="deleteTenant" class="btn btn-danger">Delete
@@ -325,16 +326,17 @@ h2 {
 			</div>
 		</div>
 	</div>
-	<%}
-	else{
+	<%
+	} else {
 	%>
 	<div class="sidebar">
 		<img style="padding-bottom: 30px;" width="230" height="150"
 			src="img/logo.png" alt=""> <br>
 		<ul class="nav flex-column">
 			<li class="nav-item"><img width="30" height="30"
-				src="img/profileicon.png" alt="Profile" /> <a class="nav-link active"
-				href="SearchTenantServlet" data-target="profile">Profile</a></li>
+				src="img/profileicon.png" alt="Profile" /> <a
+				class="nav-link active" href="SearchTenantServlet"
+				data-target="profile">Profile</a></li>
 			<li class="nav-item"><img width="30" height="30"
 				src="img/eb.png" alt="EB Bill" /> <a class="nav-link"
 				href="payment.jsp" data-target="addEBBill">payment</a></li>
@@ -367,13 +369,13 @@ h2 {
 								placeholder="Search" aria-label="Search"
 								aria-describedby="search-addon">
 						</div>
+					</form>
 				</div>
 				<div class="col-md-3">
 					<div class="input-group">
 						<button type="submit" class="btn btn-dark">Search</button>
 					</div>
 				</div>
-				</form>
 			</div>
 			<div class="container tenant-info">
 				<!-- Display search results here -->
@@ -384,7 +386,7 @@ h2 {
 
 				if (tenant != null) {
 				%>
-				
+
 				<div class="tenant-header mb-4">
 					<img
 						src="data:image/jpeg;base64,<%=Base64.getEncoder().encodeToString(tenant.getPhoto())%>"
@@ -396,83 +398,122 @@ h2 {
 						</div>
 					</div>
 				</div>
-				<form action="DeleteServlet" method="post">
-					<div class="mb-4">
-						<input type="hidden" value="<%=tenant.getId()%>" name="deleteId">
-						<button type="submit" name="deleteTenant" class="btn btn-primary">Edit Photo</button>
-					</div>
-				</form>
-				<div class="row">
-					<div class="col-md-12 mb-4">
-						<div class="card">
-							<div class="card-header">Personal Information</div>
-							<div class="card-body">
-								<div class="info-item">
-										<strong>Aadhaar Number:</strong> <span><%=tenant.getAadhaarNumber()%></span>
-									</div>
-									<div class="info-item">
-										<strong>Email:</strong> <span><%=tenant.getEmail()%></span>
-									</div>
-									<div class="info-item">
-										<strong>Flat Type:</strong> <span><%=tenant.getFlatType()%></span>
-									</div>
-									<div class="info-item">
-										<strong>Flat Floor:</strong> <span><%=tenant.getFlatFloor()%></span>
-									</div>
-									<div class="info-item">
-										<strong>Family Members:</strong> <span><%=tenant.getFamilyNembers()%></span>
-									</div>
-									<div class="info-item">
-										<strong>Date of Joining:</strong> <span><%=tenant.getDateOfJoining()%></span>
-									</div>
-							</div>
+			</div>
+			<!-- Edit Photo Modal -->
+			<div class="modal fade" id="editPhotoModal" tabindex="-1"
+				role="dialog" aria-labelledby="editPhotoModalLabel"
+				aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="editPhotoModalLabel">Edit Photo</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
 						</div>
+						<form action="DeleteServlet" method="post"
+							enctype="multipart/form-data">
+							<div class="modal-body">
+								<div class="form-group">
+									<label for="newPhoto">Choose Photo:</label> <input type="file"
+										class="form-control-file" id="newPhoto" name="newPhoto"
+										accept="image/*">
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary"
+									onclick="hideEditPhotoModal()">Back</button>
+
+								<button type="submit" class="btn btn-primary">Upload</button>
+							</div>
+						</form>
 					</div>
-					<div class="col-md-12 mb-4">
-						<div class="card">
-							<div class="card-header">Financial Information</div>
-							<div class="card-body">
-								<div class="info-item">
-									<strong>Advance Amount:</strong> <span><%=tenant.getAdvanceAmount()%></span>
-								</div>
-								<div class="info-item">
-									<strong>Advance Status:</strong> <span><%=tenant.getAdvanceStatus()%></span>
-								</div>
-								<div class="info-item">
-									<strong>Rent Amount:</strong> <span><%=tenant.getRentAmount()%></span>
-								</div>
-								<div class="info-item">
-									<strong>Rent Status:</strong> <span><%=tenant.getRentAmountStatus()%></span>
-								</div>
-								<div class="info-item">
-									<strong>EB Bill:</strong> <span><%=tenant.getEbBill()%></span>
-								</div>
-								<div class="info-item">
-									<strong>EB Bill Status:</strong> <span><%=tenant.getEbBillStatus()%></span>
-								</div>
+				</div>
+			</div>
+
+			<!-- Button to trigger Edit Photo Modal -->
+			<button type="button" class="edit btn btn-primary"
+				onclick="$('#editPhotoModal').modal('show')">Edit Photo</button>
+			<br> <br>
+			<div class="row">
+				<div class="col-md-12 mb-4">
+					<div class="card">
+						<div class="card-header">Personal Information</div>
+						<div class="card-body">
+							<div class="info-item">
+								<strong>Aadhaar Number:</strong> <span><%=tenant.getAadhaarNumber()%></span>
+							</div>
+							<div class="info-item">
+								<strong>Email:</strong> <span><%=tenant.getEmail()%></span>
+							</div>
+							<div class="info-item">
+								<strong>Flat Type:</strong> <span><%=tenant.getFlatType()%></span>
+							</div>
+							<div class="info-item">
+								<strong>Flat Floor:</strong> <span><%=tenant.getFlatFloor()%></span>
+							</div>
+							<div class="info-item">
+								<strong>Family Members:</strong> <span><%=tenant.getFamilyNembers()%></span>
+							</div>
+							<div class="info-item">
+								<strong>Date of Joining:</strong> <span><%=tenant.getDateOfJoining()%></span>
 							</div>
 						</div>
 					</div>
 				</div>
-				<%
-				} else {
-				%>
-				<p>No tenants found.</p>
-				<%
-				}
-				%>
-	<%} %>
+				<div class="col-md-12 mb-4">
+					<div class="card">
+						<div class="card-header">Financial Information</div>
+						<div class="card-body">
+							<div class="info-item">
+								<strong>Advance Amount:</strong> <span><%=tenant.getAdvanceAmount()%></span>
+							</div>
+							<div class="info-item">
+								<strong>Advance Status:</strong> <span><%=tenant.getAdvanceStatus()%></span>
+							</div>
+							<div class="info-item">
+								<strong>Rent Amount:</strong> <span><%=tenant.getRentAmount()%></span>
+							</div>
+							<div class="info-item">
+								<strong>Rent Status:</strong> <span><%=tenant.getRentAmountStatus()%></span>
+							</div>
+							<div class="info-item">
+								<strong>EB Bill:</strong> <span><%=tenant.getEbBill()%></span>
+							</div>
+							<div class="info-item">
+								<strong>EB Bill Status:</strong> <span><%=tenant.getEbBillStatus()%></span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<%
+			} else {
+			%>
+			<p>No tenants found.</p>
+			<%
+			}
+			%>
+			<%
+			}
+			%>
 
-	<!-- Bootstrap JS and dependencies -->
-	<script
-		src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
-	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-	<script
-		src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+			<!-- Bootstrap JS and dependencies -->
+			<script
+				src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+			<script
+				src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
+			<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+			<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+			<script
+				src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+			<script
+				src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+			<script>
+				function hideEditPhotoModal() {
+					$('#editPhotoModal').modal('hide');
+				}
+			</script>
 </body>
 </html>

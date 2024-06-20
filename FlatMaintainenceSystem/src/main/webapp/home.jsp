@@ -192,8 +192,8 @@ h2 {
         <img style="padding-bottom: 30px;" width="230" height="150" src="img/logo.png" alt=""> <br>
         <ul class="nav flex-column">
             <li class="nav-item">
-                <img width="30" height="30" src="img/search.png" alt="Profile" />
-                <a class="nav-link active" href="SearchTenantServlet" data-target="profile">Search</a>
+                <img width="30" height="30" src="img/profileicon.png" alt="Profile" />
+                <a class="nav-link active" href="SearchTenantServlet" data-target="profile">Profile</a>
             </li>
             <li class="nav-item">
                 <img width="30" height="30" src="img/eb.png" alt="EB Bill" />

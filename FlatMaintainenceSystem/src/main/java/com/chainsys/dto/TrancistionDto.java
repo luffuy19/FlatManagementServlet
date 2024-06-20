@@ -1,5 +1,8 @@
 package com.chainsys.dto;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -503,5 +506,27 @@ public class TrancistionDto {
             try {  conn.close(); } catch (Exception e) { e.printStackTrace(); }
         }
         return success;
+    }
+	public void updatePhoto(byte[] imageParts, int id) throws ClassNotFoundException {
+        String sql = "UPDATE users_details SET photo=? WHERE users_id=?";
+
+        try (Connection con = Connectionutil.getConnections();
+             PreparedStatement ps = con.prepareStatement(sql);) {
+
+            // Set the binary stream for the photo column
+        	ps.setBytes(1,imageParts);
+            ps.setInt(2, id);
+
+            // Execute the update
+            int rowsUpdated = ps.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("Photo updated successfully for user ID: " + id);
+            } else {
+                System.out.println("No user found with ID: " + id);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
